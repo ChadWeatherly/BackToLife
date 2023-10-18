@@ -1,0 +1,8 @@
+repository "BackToLife@SealTeam7@cloud"
+  path "/"
+<<<<<<< HEAD
+    smartbranch "/main/testing.movement"   
+=======
+    smartbranch "/main"    
+>>>>>>> player_movement
+     
