@@ -10,7 +10,7 @@ __Steps when Working__
 
 Note: Everything can be done within the GitHub desktop app, which is easier. I've removed git lfs for this repo. 
 
-_Before even beginning:__ Totally remove/delete your file folder where the game project files are located. Through either github.com or the desktop app, Clone the repository to your machine, which will download this repository to your computer. It will ensure that all the settings are caught up for git lfs and the .gitignore so that Library files aren't added.
+__Before even beginning:__ Totally remove/delete your file folder where the game project files are located. Through either github.com or the desktop app, Clone the repository to your machine, which will download this repository to your computer. It will ensure that all the settings are caught up for git lfs and the .gitignore so that Library files aren't added.
 
 1. As before, we have branches, where _master_ is the working version of our project. In this case, when working on something new, create a new branch based off _master_, naming it based on what you're doing (lighting, enemy_movement, etc.)
 2. Within that branch, you can change whatever you want. There are always two versions of that branch, the local version (on your computer) and the remote version (what everyone else sees). As you work locally, your local version will be different than the remote version. You will commit and push your changes to the remote to keep it up to date.
