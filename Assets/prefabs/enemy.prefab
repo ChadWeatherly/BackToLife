@@ -355,7 +355,7 @@ MonoBehaviour:
   sightCone: {fileID: 5416002245250370179}
   player: {fileID: 0}
   susDist: 7.5
-  atkDist: 4
+  atkDist: 5
   coneSprite: {fileID: 9173897137589415532}
   characterSprite: {fileID: 8827835582821368430}
   northSprites:
