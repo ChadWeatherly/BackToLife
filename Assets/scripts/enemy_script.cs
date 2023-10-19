@@ -109,6 +109,7 @@ public class enemy_script : MonoBehaviour
             currStatus = "aggro";
             moveSpeed = 2.25f;
             pathExists = false;
+            patrol = false;
             Move(player.transform.position);
             return;
         }
@@ -116,15 +117,18 @@ public class enemy_script : MonoBehaviour
         {
             currStatus = "sus";
             moveSpeed = 2f;
+            patrol = false;
             
-            if (pathExists) // if a path already exists, follow it
+            if (prevStatus != "sus") // if status changes, make new path
             {
-                Move(vpath);
-            }
-            else // Otherwise, calculate a new path
-            {
+                pathExists = false;
+                pathType = "sus";
                 seeker.StartPath(transform.position, player.transform.position,
                     OnPathComplete);
+            }
+            else if (pathExists) // Otherwise, calculate a new path
+            {
+                Move(vpath);
             }
         }
         else // if calm
@@ -132,32 +136,43 @@ public class enemy_script : MonoBehaviour
             currStatus = "calm";
             moveSpeed = 1.5f;
 
-            if (prevStatus != "calm" ) // if status changed
+            if (prevStatus != "calm") // if status changed to calm 
             {
-                if (pathExists)
+                if (pathExists) // if a path already exists
                 {
-                    pathType = "sus";
+                    pathType = "sus"; // continue to follow the suspicious path
                     Move(vpath);
                 }
-                else
+                else // if no path exists, then begin to move back to patrolling
                 {
+                    pathType = "calm";
                     seeker.StartPath(transform.position, waypoints[wpi].position,
                                         OnPathComplete);
                 }
+            }
+            else if (pathType == "sus") // even if enemy has been calm, continue suspicious path
+            {
+                if (pathExists) { Move(vpath); }
+                else // Once that path has been traversed, move back to patrolling
+                {
+                    pathType = "calm";
+                    seeker.StartPath(transform.position, waypoints[wpi].position,
+                                        OnPathComplete);
+                }
+            }
+            else if (pathExists) // This is triggered only if a path back to waypoints exists
+            {
+                Move(vpath);
             }
             else if (patrol)
             {
                 Move(waypoints);
             }
-            else if (pathExists)
-            {
-                Move(vpath);
-            }
             else
             {
-                seeker.StartPath(transform.position, waypoints[wpi].position,
-                                        OnPathComplete);
                 pathType = "calm";
+                seeker.StartPath(transform.position, waypoints[wpi].position,
+                                    OnPathComplete);
             }
         }
     }
