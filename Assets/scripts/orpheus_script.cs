@@ -47,7 +47,7 @@ public class orpheus_script : MonoBehaviour
             angleDirection = Mathf.Atan2(moveY, moveX) * Mathf.Rad2Deg + 90;
             // This angle has 0 = South, with 90 = East, ...
         }
-        Debug.Log(angleDirection);
+        //Debug.Log(angleDirection);
 
     }
 

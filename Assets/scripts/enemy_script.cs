@@ -1,28 +1,41 @@
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using System.Collections.Generic;
+using Pathfinding;
 
 public class enemy_script : MonoBehaviour
 {
     public Transform[] waypoints;  // Array of patrol waypoints, as Transforms
     public Transform spawnPoint;
-    public float moveSpeed = 2.5f;
+    public float moveSpeed = 1.5f;
     public float stoppingDistance = 0.1f;
+    public float stuckDist = 0.25f; // If move less than less, recalculate path
     public float animateTime;
     public GameObject sightCone;
     public GameObject player;
 
+    // For finding player
+    // Seeker is the component that will help us find a path from A -> B
+    private Seeker seeker;
+
     private int wpi; // WayPoint Index
+    private int swpi; // Seeker waypoint index on path
     private float dist; // Distance between character and next waypoint
     private Rigidbody2D rb; // Our RigidBody (which we want to move)
     private Vector2 wpPos; // Next WayPoint Position
+    private string pathType;
+    private bool patrol = true; // Bool to tell us whether enemy is back on waypoint path
+    private bool pathExists = false; // finds whether a path has been completed or not
+    private List<Vector3> vpath; // current vector path
+    private Vector3 prevPos; // Previous position, so if character gets stuck, makes new path
 
     private float direction; // Angular direction of character, where 0/360 deg is South
 
     private float playerDist; // Distance to player
-    private string status = "calm"; // calm, sus, aggro
-    public float susDist = 20.0f; // sus threshold
-    public float atkDist = 10.0f; // attack threshold
+    private string currStatus = "calm"; // calm, sus, aggro
+    private string prevStatus = "start";
+    public float susDist = 8f; // sus threshold
+    public float atkDist = 3f; // attack threshold (for now)
     public SpriteRenderer coneSprite;
     // Made new colors to let the cone be translucent (final value, alpha, is transparency)
     private readonly Color coneRed = new Color(1, 0, 0, 0.1f);
@@ -41,11 +54,15 @@ public class enemy_script : MonoBehaviour
     private int si; // Sprite index
     private float timer;
 
+   
+
     void Start() // Runs at the start of the game, before any frames
     {
         rb = GetComponent<Rigidbody2D>();
+        seeker = GetComponent<Seeker>();
         
         transform.position = spawnPoint.position;
+        // Distance to player
         wpi = 1; // Spawns at WayPoint 0, moves towards WayPoint 1
         wpPos = new Vector2(waypoints[wpi].position.x, waypoints[wpi].position.y);
 
@@ -59,31 +76,112 @@ public class enemy_script : MonoBehaviour
             // Reload the current scene
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+        else
+        {
+            collision.GetContact(0);
+        }
     }
 
     void Update() // Updates each frame
     {
-        // Move Enemy
-        Move();
+
         // Update Cone characteristics (Angle, position, color)
         UpdateCone();
-        // Updates based on alert status
-        OnStatusChange();
         // Updates sprite based on angle direction
         UpdateDirectionSprites();
     }
 
+    private void FixedUpdate()
+    {
+        playerDist = Vector3.Distance(player.transform.position, transform.position);
+        prevPos = transform.position;
+        // Updates alert status based on distance to player
+        // Also handles all movement
+        UpdateStatus();   
+    }
+
+    private void UpdateStatus()
+    {
+        prevStatus = currStatus;
+        
+        if (playerDist <= atkDist) // if aggro
+        {
+            currStatus = "aggro";
+            moveSpeed = 2.25f;
+            pathExists = false;
+            Move(player.transform.position);
+            return;
+        }
+        else if (playerDist <= susDist) // if sus
+        {
+            currStatus = "sus";
+            moveSpeed = 2f;
+            
+            if (pathExists) // if a path already exists, follow it
+            {
+                Move(vpath);
+            }
+            else // Otherwise, calculate a new path
+            {
+                seeker.StartPath(transform.position, player.transform.position,
+                    OnPathComplete);
+            }
+        }
+        else // if calm
+        {
+            currStatus = "calm";
+            moveSpeed = 1.5f;
+
+            if (prevStatus != "calm" ) // if status changed
+            {
+                if (pathExists)
+                {
+                    pathType = "sus";
+                    Move(vpath);
+                }
+                else
+                {
+                    seeker.StartPath(transform.position, waypoints[wpi].position,
+                                        OnPathComplete);
+                }
+            }
+            else if (patrol)
+            {
+                Move(waypoints);
+            }
+            else if (pathExists)
+            {
+                Move(vpath);
+            }
+            else
+            {
+                seeker.StartPath(transform.position, waypoints[wpi].position,
+                                        OnPathComplete);
+                pathType = "calm";
+            }
+        }
+    }
+
+    private void OnPathComplete (Path p)
+    {
+        pathExists = true;
+        vpath = seeker.GetCurrentPath().vectorPath;
+        swpi = 0;
+    }
+
     // Method that actually makes Enemy walk
-    private void Move()
+    private void Move(Transform[] wpArray) // Takes in an array of Transform objects
     {
         // Calculate the direction to the next waypoint
+        // New position vector of next waypoint
+        wpPos = new Vector2(wpArray[wpi].position.x, wpArray[wpi].position.y);
         Vector2 moveDirection = (wpPos - rb.position).normalized;
 
         // Move the NPC using Rigidbody2D velocity
         rb.velocity = moveDirection * moveSpeed;
 
         // Calculate direction
-        // This angle has 0 = South, with 90 = East, ...
+        // This angle has 0/360 = South, with 90 = East, ...
         direction = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg + 90;
 
         // Check if the NPC has reached the current waypoint
@@ -95,13 +193,73 @@ public class enemy_script : MonoBehaviour
             wpi++;
 
             // If the NPC has reached the last waypoint, loop back to the first waypoint
-            if (wpi >= waypoints.Length)
+            if (wpi >= wpArray.Length)
             {
                 wpi = 0;
             }
-            // New position vector
-            wpPos = new Vector2(waypoints[wpi].position.x, waypoints[wpi].position.y);
         }
+    }
+
+    // Method that actually makes Enemy walk
+    // This is an "overload" of the function Move(),
+    // Which behaves differently depending on input type
+    private void Move(List<Vector3> wpArray) // Takes in a list of 3D vectors (outputs of seeker)
+    {
+        //Debug.Log(wpArray.Count);
+        // Calculate the direction to the next waypoint
+        // New position vector of next waypoint
+        wpPos = new Vector2(wpArray[swpi].x, wpArray[swpi].y);
+        Vector2 moveDirection = (wpPos - rb.position).normalized;
+
+        // Move the NPC using Rigidbody2D velocity
+        rb.velocity = moveDirection * moveSpeed;
+
+        // Calculate direction
+        // This angle has 0/360 = South, with 90 = East, ...
+        direction = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg + 90;
+
+        // Check if the NPC has reached the current waypoint
+        dist = Vector2.Distance(rb.position, wpPos);
+
+        if (dist <= stoppingDistance)
+        {
+            // Increment the waypoint index to move to the next waypoint
+            swpi++;
+
+            // If the NPC has reached the last waypoint,
+            // it means they are back on their patrolling position
+            if (swpi >= wpArray.Count)
+            {
+                pathExists = false;
+                if (pathType == "calm") { patrol = true; }
+                else {patrol = false; }
+            }
+        }
+    }
+
+    // Method that actually makes Enemy walk
+    // This is an "overload" of the function Move(),
+    // Which behaves differently depending on input type
+    private void Move(Vector3 target) // Takes in a single 3D vector to move towards (only during aggro)
+    {
+        // New position vector of next waypoint
+        wpPos = new Vector2(target.x, target.y);
+        
+        // Check if the NPC has reached the current waypoint
+        dist = Vector2.Distance(rb.position, wpPos);
+
+        if (dist > stoppingDistance)
+        {
+            Vector2 moveDirection = (wpPos - rb.position).normalized;
+
+            // Move the NPC using Rigidbody2D velocity
+            rb.velocity = moveDirection * moveSpeed;
+
+            // Calculate direction
+            // This angle has 0/360 = South, with 90 = East, ...
+            direction = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg + 90;
+        }
+        else { return; }
     }
 
     // Method to update the Cone color and position
@@ -110,32 +268,24 @@ public class enemy_script : MonoBehaviour
         // Rotates the cone towards NPC facing direction
         Vector3 angles = new Vector3(0, 0, direction);
         // Changes cone position to go around NPC
-        Vector3 position = new Vector3(rb.velocity.normalized.x*2.5f,
-            rb.velocity.normalized.y*3.0f,
+        Vector3 position = new Vector3(rb.velocity.normalized.x*5f,
+            rb.velocity.normalized.y*6.0f,
             0);
         sightCone.transform.eulerAngles = angles;
         sightCone.transform.position = transform.position + position;
         //Debug.Log(position);
 
-        // Distance to player
-        playerDist = Vector3.Distance(player.transform.position, transform.position);
-
         // Updates color of cone based on distance
-        if (playerDist <= atkDist) { coneSprite.color = coneRed; status = "aggro"; }
-        else if (playerDist <= susDist) { coneSprite.color = coneYellow; status = "sus"; }
-        else { coneSprite.color = coneGreen; status = "calm"; }
-    }
-
-    // Method to update enemy behavior based on status: calm, sus, aggro
-    private void OnStatusChange()
-    {
-        switch (status)
+        switch (currStatus)
         {
             case "calm":
+                coneSprite.color = coneGreen;
                 return;
             case "sus":
+                coneSprite.color = coneYellow;
                 return;
             case "aggro":
+                coneSprite.color = coneRed;
                 return;
         }
     }
@@ -171,7 +321,21 @@ public class enemy_script : MonoBehaviour
         }
         else
         {
-            characterSprite.sprite = southSprites[0];
+            switch (prev_nsew)
+            {
+                case "s":
+                    characterSprite.sprite = southSprites[0];
+                    return;
+                case "n":
+                    characterSprite.sprite = northSprites[0];
+                    return;
+                case "e":
+                    characterSprite.sprite = eastSprites[0];
+                    return;
+                case "w":
+                    characterSprite.sprite = westSprites[0];
+                    return;
+            }
         }
 
     }
@@ -203,5 +367,7 @@ public class enemy_script : MonoBehaviour
 
         prev_nsew = nsew;
     }
+
+
 
 }
