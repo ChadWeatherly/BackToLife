@@ -27,7 +27,7 @@ public class EnemyFootstep : MonoBehaviour
         {
             StopFootstepSound();
         }
-        Debug.Log("Distance: " + distance + ", Volume: " + volume + ", Is Playing: " + footstep.isPlaying);
+        
     }
 
     void PlayFootstepSound()
