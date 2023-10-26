@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Footstep : MonoBehaviour
 {
-    private AudioSource footStepAudioSource;
+    public AudioSource footStepAudioSource;
+    public AudioSource runningFootStepAudioSource;
     private Vector2 lastPosition;
     public float movementThreshold = 0.1f;
 
     private void Start()
     {
-        footStepAudioSource = GetComponent<AudioSource>();
         lastPosition = new Vector2(transform.position.x, transform.position.y);
     }
 
@@ -25,8 +25,15 @@ public class Footstep : MonoBehaviour
         float movementMagnitude = GetMovementMagnitude();
         if (movementMagnitude > movementThreshold)
         {
-            if (!footStepAudioSource.isPlaying)
+            if(Input.GetKey(KeyCode.LeftShift) && !runningFootStepAudioSource.isPlaying){
+                Debug.Log("Running");
+                runningFootStepAudioSource.Play();
+            }
+            else if (!footStepAudioSource.isPlaying && !Input.GetKey(KeyCode.LeftShift))
             {
+                if(runningFootStepAudioSource.isPlaying)
+                    runningFootStepAudioSource.Pause();
+                Debug.Log("Walking");
                 footStepAudioSource.Play();
             }
         }
@@ -34,7 +41,13 @@ public class Footstep : MonoBehaviour
         {
             if (footStepAudioSource.isPlaying)
             {
+                Debug.Log("Stop walking");
                 footStepAudioSource.Pause();
+            }
+            if (runningFootStepAudioSource.isPlaying)
+            {
+                Debug.Log("Stop running");
+                runningFootStepAudioSource.Pause();
             }
         }
     }
