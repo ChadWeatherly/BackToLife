@@ -3,8 +3,10 @@ using UnityEngine;
 using System.Collections.Generic;
 using Pathfinding;
 
+
 public class enemy_script : MonoBehaviour
 {
+    public CaughtScreenManager caughtScreenManager;
     public Transform[] waypoints;  // Array of patrol waypoints, as Transforms
     public Transform spawnPoint;
     public float moveSpeed = 1.5f;
@@ -73,14 +75,21 @@ public class enemy_script : MonoBehaviour
     {
         if (collision.gameObject == player) // Checks if collision is with the player
         {
-            // Reload the current scene
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
-        else
+         if (caughtScreenManager != null)
         {
-            collision.GetContact(0);
+             caughtScreenManager.ShowCaughtScreen();
+        }
+          else
+        {
+             Debug.LogError("CaughtScreenManager not assigned in the enemy  script!");
         }
     }
+    else
+    {
+        collision.GetContact(0);
+    }
+    }
+
 
     void Update() // Updates each frame
     {
