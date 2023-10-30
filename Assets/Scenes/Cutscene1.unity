@@ -253,8 +253,7 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials:
-  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -631,32 +630,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 1632840948}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 448b8b1cf3dfa74429aaa1f7138a4bb1, type: 3}
+  m_Script: {fileID: 11500000, guid: 36b348346b5904df7abff439112dbdc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   lines: {fileID: 835471184}
   words:
   - Orpheus - "Nngh... I... what... what is this?"
   - Orpheus staggered to his feet, the effort to get there nearly exhausting him.
-  - He felt winded, exhausted, and hungry all at once, yet his eyes had no bags,
+    He felt winded, exhausted, and hungry all at once, yet his eyes had no bags,
     his stomach did not growl, and his lungs were full of breath.
   - His arms were cold, shrivelled and gray. Taking his first steps, he could see
     that beneath a tattered robe his figure was almost skeletal.
   - Something was terribly wrong. But pouring through his mind, Orpheus found that
     he had not a memory to call upon.
-  - 'All he could do now was shamble forward. A dry throat could only rasp together
-    sounds, and he could not muster strength to wave his arms around. '
+  - All he could do now was shamble forward. A dry throat could only rasp together
+    sounds, and he could not muster strength to wave his arms around.
   - Every step sending his weak heart pounding, it felt like an eternity as he wandered
     through the wilderness. But there was something warm up ahead.
   - Not a physical warmth, but a presence. Like some sort of sixth sense, he knew
     it lie on the path ahead, and could not help but move ever toward it.
-  - Eventually, the path revealed itself - he came at last upon a small village.
-  - 'Orpheus approached the gates, but was seen by a passing milkmaid. With one look
+  - 'Eventually, the path revealed itself - he came at last upon a small village.
+    Orpheus approached the gates, but was seen by a passing milkmaid. With one look
     at his unearthly visage, she shrieked and fled, and the noise attracted the gaze
-    of others.  '
+    of others. '
   - Orpheus turned back and found safe cover behind foilage, but as he watched the
     village gates, soldiers emerged and began to search the area, armed to the teeth.
-  - He got the impression that he was not welcome, and did not want to test the waters,
+    He got the impression that he was not welcome, and did not want to test the waters,
     but doubtless the warmth he seeked lay further within.
   - It was heavily guarded, so he'd have to be careful and sneak around. But there
     was no turning back. He didn't know who or what he was, but the closest thing
