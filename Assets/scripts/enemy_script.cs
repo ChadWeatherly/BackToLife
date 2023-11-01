@@ -34,6 +34,8 @@ public class enemy_script : MonoBehaviour
     private float direction; // Angular direction of character, where 0/360 deg is South
 
     private float playerDist; // Distance to player
+    private Vector2 playerPos2D;
+    private Vector2 enemyPos2D;
     private string currStatus = "calm"; // calm, sus, aggro
     private string prevStatus = "start";
     public float susDist = 8f; // sus threshold
@@ -75,19 +77,15 @@ public class enemy_script : MonoBehaviour
     {
         if (collision.gameObject == player) // Checks if collision is with the player
         {
-         if (caughtScreenManager != null)
-        {
-             caughtScreenManager.ShowCaughtScreen();
+            if (caughtScreenManager != null)
+            {
+                caughtScreenManager.ShowCaughtScreen();
+            }
+            else
+            {
+                Debug.LogError("CaughtScreenManager not assigned in the enemy script!");
+            }
         }
-          else
-        {
-             Debug.LogError("CaughtScreenManager not assigned in the enemy  script!");
-        }
-    }
-    else
-    {
-        collision.GetContact(0);
-    }
     }
 
 
@@ -102,7 +100,10 @@ public class enemy_script : MonoBehaviour
 
     private void FixedUpdate()
     {
-        playerDist = Vector3.Distance(player.transform.position, transform.position);
+        //Debug.Log(playerDist);
+        playerPos2D = new Vector2(player.transform.position.x, player.transform.position.y);
+        enemyPos2D = new Vector2(transform.position.x, transform.position.y);
+        playerDist = Vector2.Distance(playerPos2D, enemyPos2D);
         prevPos = transform.position;
         // Updates alert status based on distance to player
         // Also handles all movement
@@ -124,6 +125,7 @@ public class enemy_script : MonoBehaviour
         }
         else if (playerDist <= susDist) // if sus
         {
+            Debug.Log(playerDist);
             currStatus = "sus";
             moveSpeed = 2f;
             patrol = false;
