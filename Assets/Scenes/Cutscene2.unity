@@ -252,8 +252,7 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials:
-  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -607,7 +606,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1632840948}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 448b8b1cf3dfa74429aaa1f7138a4bb1, type: 3}
+  m_Script: {fileID: 11500000, guid: 36b348346b5904df7abff439112dbdc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   lines: {fileID: 835471184}
@@ -617,14 +616,14 @@ MonoBehaviour:
     and emotional warmth resonate through him.
   - This felt right. Like slipping into a warm bath after a long day. He was tired...
     so tired... and this wasn't enough, but it was a modicum of rest.
-  - On instinct, he pushed the crystal ball over, and it shattered on the floor.
+  - ' On instinct, he pushed the crystal ball over, and it shattered on the floor.
     The flame shot toward him, and his ears rang as visions began to reveal themselves
-    to him...
-  - Orpheus. His name was Orpheus, that much he knew. He saw the minutes, hours before
-    his awakening, surrounded by a group of mages.
-  - 'Each face was a blast of memory. He saw their names, their histories pour over
-    him. '
-  - Otazz the Healer. Adarin of the Forest. Axyll of the Flame. Padarin the Guardian.
+    to him...'
+  - 'Orpheus. His name was Orpheus, that much he knew. He saw the minutes, hours
+    before his awakening, surrounded by a group of mages. '
+  - Each face was a blast of memory. He saw their names, their histories pour over
+    him.  Otazz the Healer. Adarin of the Forest. Axyll of the Flame. Padarin the
+    Guardian.
   - And there they were, surrounding and cursing him. He stood, not just some bystander
     but a fellow wizard of their ranks, bound by a powerful spell.
   - He watched them tear his soul from his body, and rip it asunder into four pieces.
