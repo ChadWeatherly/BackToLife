@@ -17,10 +17,15 @@ public class orpheus_script : MonoBehaviour
     public List<Sprite> eastSprites;
     public List<Sprite> westSprites;
 
+    public AudioSource footStepAudioSource;
+    public AudioSource runningFootStepAudioSource;
+    private Vector2 lastPosition;
+    public float movementThreshold = 0.1f;
     // Start is called before the first frame update
     void Start()
     {
         transform.position = spawnPoint.position;
+        lastPosition = new Vector2(transform.position.x, transform.position.y);
     }
 
     // Update is called once per frame
@@ -29,7 +34,7 @@ public class orpheus_script : MonoBehaviour
         ProcessInputs();
         Move();
         UpdateDirectionSprite();
-
+        PlayFootstepSound();     
     }
 
     void ProcessInputs()
@@ -82,5 +87,46 @@ public class orpheus_script : MonoBehaviour
         {
             characterSprite.sprite = westSprites[0];
         }
+    }
+    private void PlayFootstepSound()
+    {
+
+        float movementMagnitude = GetMovementMagnitude();
+        if (movementMagnitude > movementThreshold)
+        {
+            if(Input.GetKey(KeyCode.LeftShift) && !runningFootStepAudioSource.isPlaying){
+                if(footStepAudioSource.isPlaying)
+                    footStepAudioSource.Pause();
+                runningFootStepAudioSource.Play();
+            }
+            else if (!footStepAudioSource.isPlaying && !Input.GetKey(KeyCode.LeftShift))
+            {
+                if(runningFootStepAudioSource.isPlaying)
+                    runningFootStepAudioSource.Pause();
+                Debug.Log("Walking");
+                footStepAudioSource.Play();
+            }
+        }else
+        {
+            if (footStepAudioSource.isPlaying)
+            {
+                Debug.Log("Stop walking");
+                footStepAudioSource.Pause();
+            }
+            if (runningFootStepAudioSource.isPlaying)
+            {
+                Debug.Log("Stop running");
+                runningFootStepAudioSource.Pause();
+            }
+        }
+        lastPosition = new Vector2(transform.position.x, transform.position.y);   
+    }
+    private float GetMovementMagnitude()
+    {
+        Vector2 currentPosition = new Vector2(transform.position.x, transform.position.y);
+        float magnitude = (currentPosition - lastPosition).magnitude;
+
+        Debug.Log(magnitude);
+        return magnitude;
     }
 }
