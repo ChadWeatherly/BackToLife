@@ -403,12 +403,14 @@ public class enemy_script : MonoBehaviour
     {
         float volume = Mathf.Clamp01(1f - playerDist / maxSoundDistance);
         footstep.volume = volume;
-
-        if (playerDist <= maxSoundDistance && !footstep.isPlaying)
+        //volume *= AudioManager.GlobalVolume //this is once we added a slider for the volume
+        if (playerDist <= maxSoundDistance)
         {
-            //footstep.time = 0f;
-            Debug.Log("Playing sound");
-            footstep.Play();
+            footstep.volume = volume;
+            if (!footstep.isPlaying)
+            {
+                footstep.Play();
+            }
         }
         else if (footstep.isPlaying)
         {
