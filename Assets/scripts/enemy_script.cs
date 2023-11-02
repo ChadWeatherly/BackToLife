@@ -16,6 +16,10 @@ public class enemy_script : MonoBehaviour
     public GameObject sightCone;
     public GameObject player;
 
+    // For sound
+    public float maxSoundDistance = 15f;
+    public AudioSource footstep;
+
     // For finding player
     // Seeker is the component that will help us find a path from A -> B
     private Seeker seeker;
@@ -58,8 +62,6 @@ public class enemy_script : MonoBehaviour
     private int si; // Sprite index
     private float timer;
 
-   
-
     void Start() // Runs at the start of the game, before any frames
     {
         rb = GetComponent<Rigidbody2D>();
@@ -96,6 +98,7 @@ public class enemy_script : MonoBehaviour
         UpdateCone();
         // Updates sprite based on angle direction
         UpdateDirectionSprites();
+      
     }
 
     private void FixedUpdate()
@@ -105,6 +108,8 @@ public class enemy_script : MonoBehaviour
         enemyPos2D = new Vector2(transform.position.x, transform.position.y);
         playerDist = Vector2.Distance(playerPos2D, enemyPos2D);
         prevPos = transform.position;
+        // Updates Volume of footsteps
+        UpdateFootstepVol();
         // Updates alert status based on distance to player
         // Also handles all movement
         UpdateStatus();   
@@ -394,6 +399,21 @@ public class enemy_script : MonoBehaviour
         prev_nsew = nsew;
     }
 
+    void UpdateFootstepVol()
+    {
+        float volume = Mathf.Clamp01(1f - playerDist / maxSoundDistance);
+        footstep.volume = volume;
 
+        if (playerDist <= maxSoundDistance && !footstep.isPlaying)
+        {
+            //footstep.time = 0f;
+            Debug.Log("Playing sound");
+            footstep.Play();
+        }
+        else if (footstep.isPlaying)
+        {
+            footstep.Pause();
+        }
+    }
 
 }

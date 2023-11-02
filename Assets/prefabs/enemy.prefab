@@ -313,11 +313,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 64d279896c2631c46b9e1410a94c88c1, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -452,7 +452,9 @@ MonoBehaviour:
   animateTime: 0.25
   sightCone: {fileID: 5416002245250370179}
   player: {fileID: 2116798045378936174, guid: 0b5eb923dd4adc04cb7cf4bff705e493, type: 3}
-  susDist: 7.5
+  maxSoundDistance: 20
+  footstep: {fileID: 3869814491984808493}
+  susDist: 8
   atkDist: 5
   coneSprite: {fileID: 9173897137589415532}
   characterSprite: {fileID: 8827835582821368430}
