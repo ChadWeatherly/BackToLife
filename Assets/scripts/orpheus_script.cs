@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class orpheus_script : MonoBehaviour
 {
@@ -16,6 +17,12 @@ public class orpheus_script : MonoBehaviour
     public List<Sprite> southSprites;
     public List<Sprite> eastSprites;
     public List<Sprite> westSprites;
+    private List<Sprite> currentSpriteGroup;
+    private string nsew; // North, South, East, West
+    private string prev_nsew;
+    private int si; // Sprite index
+    private float timer;
+    public float animateTime = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -28,7 +35,7 @@ public class orpheus_script : MonoBehaviour
     {
         ProcessInputs();
         Move();
-        UpdateDirectionSprite();
+        UpdateDirectionSprites();
 
     }
 
@@ -64,23 +71,79 @@ public class orpheus_script : MonoBehaviour
     }
 
     // Updates sprite based on angleDirection
-    void UpdateDirectionSprite()
+    void UpdateDirectionSprites()
     {
         if (angleDirection >= 315f || angleDirection < 45f)
         {
-            characterSprite.sprite = southSprites[0];
+            nsew = "s";
+            currentSpriteGroup = southSprites;
         }
         else if (angleDirection >= 45f && angleDirection < 135f)
         {
-            characterSprite.sprite = eastSprites[0];
+            nsew = "e";
+            currentSpriteGroup = eastSprites;
         }
         else if (angleDirection >= 135f && angleDirection < 225f)
         {
-            characterSprite.sprite = northSprites[0];
+            nsew = "n";
+            currentSpriteGroup = northSprites;
         }
         else
         {
-            characterSprite.sprite = westSprites[0];
+            nsew = "w";
+            currentSpriteGroup = westSprites;
         }
+
+        // If character is not idle
+        if (rb.velocity.magnitude > 0)
+        {
+            AnimateSprite();
+        }
+        else
+        {
+            switch (prev_nsew)
+            {
+                case "s":
+                    characterSprite.sprite = southSprites[0];
+                    return;
+                case "n":
+                    characterSprite.sprite = northSprites[0];
+                    return;
+                case "e":
+                    characterSprite.sprite = eastSprites[0];
+                    return;
+                case "w":
+                    characterSprite.sprite = westSprites[0];
+                    return;
+            }
+        }
+
+    }
+
+    void AnimateSprite()
+    {
+        // If direction changes
+        if (nsew != prev_nsew)
+        {
+            si = 0;
+            timer = 0;
+        }
+        else
+        {
+            characterSprite.sprite = currentSpriteGroup[si];
+            timer += Time.deltaTime;
+            // Keeps sprite until animateTime is up
+            if (timer >= animateTime)
+            {
+                si++;
+                timer = 0f;
+                if (si >= currentSpriteGroup.ToArray().Length)
+                {
+                    si = 0;
+                }
+            }
+        }
+
+        prev_nsew = nsew;
     }
 }
