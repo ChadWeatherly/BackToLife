@@ -44,6 +44,8 @@ public class orpheus_script : MonoBehaviour
     {
         float moveX = Input.GetAxisRaw("Horizontal"); // Gets x-direction velocity
         float moveY = Input.GetAxisRaw("Vertical");   // Gets y-direction velocity
+        Debug.Log(moveX);
+        Debug.Log(moveY);
 
         moveDirection = new Vector2(moveX, moveY).normalized;
         if (moveX == 0 && moveY == 0)
