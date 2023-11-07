@@ -20,7 +20,7 @@ public class InteractableButton : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !isPressed) // Replace with your input method (e.g., mouse click, touch).
+        if (Input.GetKeyDown(KeyCode.E) && !isPressed) // Replace with your input method (e.g., mouse click, touch).
         {
             isPressed = true;
             if (wallEnabled)
