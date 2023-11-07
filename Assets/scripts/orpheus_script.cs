@@ -103,19 +103,16 @@ public class orpheus_script : MonoBehaviour
             {
                 if(runningFootStepAudioSource.isPlaying)
                     runningFootStepAudioSource.Pause();
-                Debug.Log("Walking");
                 footStepAudioSource.Play();
             }
         }else
         {
             if (footStepAudioSource.isPlaying)
             {
-                Debug.Log("Stop walking");
                 footStepAudioSource.Pause();
             }
             if (runningFootStepAudioSource.isPlaying)
             {
-                Debug.Log("Stop running");
                 runningFootStepAudioSource.Pause();
             }
         }
@@ -125,8 +122,6 @@ public class orpheus_script : MonoBehaviour
     {
         Vector2 currentPosition = new Vector2(transform.position.x, transform.position.y);
         float magnitude = (currentPosition - lastPosition).magnitude;
-
-        Debug.Log(magnitude);
         return magnitude;
     }
 }

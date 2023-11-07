@@ -61,12 +61,12 @@ public class enemy_script : MonoBehaviour
     private string prev_nsew;
     private int si; // Sprite index
     private float timer;
-
+    private Vector2 lastPosition;
     void Start() // Runs at the start of the game, before any frames
     {
         rb = GetComponent<Rigidbody2D>();
         seeker = GetComponent<Seeker>();
-        
+        lastPosition = new Vector2(transform.position.x, transform.position.y);
         transform.position = spawnPoint.position;
         // Distance to player
         wpi = 1; // Spawns at WayPoint 0, moves towards WayPoint 1
@@ -402,9 +402,10 @@ public class enemy_script : MonoBehaviour
     void UpdateFootstepVol()
     {
         float volume = Mathf.Clamp01(1f - playerDist / maxSoundDistance);
+        float movementMagnitude = GetMovementMagnitude();
         footstep.volume = volume;
         //volume *= AudioManager.GlobalVolume //this is once we added a slider for the volume
-        if (playerDist <= maxSoundDistance)
+        if (playerDist <= maxSoundDistance && movementMagnitude > .0001)
         {
             footstep.volume = volume;
             if (!footstep.isPlaying)
@@ -416,6 +417,14 @@ public class enemy_script : MonoBehaviour
         {
             footstep.Pause();
         }
+        lastPosition = new Vector2(transform.position.x, transform.position.y);   
+    
     }
+    private float GetMovementMagnitude()
+    {
+        Vector2 currentPosition = new Vector2(transform.position.x, transform.position.y);
+        float magnitude = (currentPosition - lastPosition).magnitude;
 
+        return magnitude;
+    }
 }
