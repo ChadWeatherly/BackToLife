@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Orpheus
+  - SoulDoor
+  - Crystal
+  - Soul
+  - Enemies
   layers:
   - Default
   - TransparentFX
@@ -44,4 +48,13 @@ TagManager:
     locked: 0
   - name: Trees
     uniqueID: 2101871819
+    locked: 0
+  - name: Background
+    uniqueID: 2380524053
+    locked: 0
+  - name: Midground
+    uniqueID: 817607705
+    locked: 0
+  - name: Foreground
+    uniqueID: 1363574105
     locked: 0
