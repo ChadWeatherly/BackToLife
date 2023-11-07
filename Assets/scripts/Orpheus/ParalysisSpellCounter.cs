@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class ParalysisSpellCounter : MonoBehaviour
 {
-    public int spellNum;        // adds to the crystalTxt count - deb
+    public int spellNum;                            // stores the number of spells -deb
 
-    public void CrystalCollection()
+    public void SpellCountUpdater()
     {
-        spellNum = Updater.crystalCount -= 1;     // updates the crystal counter -deb
+        spellNum = Updater.paralysisSpells -= 1;    // updates the spell counter -deb
     }
 }

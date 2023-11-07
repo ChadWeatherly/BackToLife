@@ -19,10 +19,13 @@ public class orpheus_script : MonoBehaviour
 
     public CrystalCounter crystalCounter;
     public MemoryCounter memCount;
+    public float memRegained = 0.25f;
 
-    public ParalysisSpellRings spell;
-    public Animator spellAnima;
     public ParalysisSpellCasting castingSpell;
+    public AudioSource casting;
+    public bool isCastingParalysis;
+
+    public SoulDoors openDoors;
 
     // Start is called before the first frame update
     void Start()
@@ -38,6 +41,17 @@ public class orpheus_script : MonoBehaviour
         Move();
         UpdateDirectionSprite();
 
+    }
+
+    private void FixedUpdate()
+    {
+        rb.velocity = moveDirection * moveSpeed;                                // for smother player motion -deb
+
+        if (Input.GetKeyDown(KeyCode.DownArrow) && Updater.paralysisSpells > 0) // checks for spell casting key and if any
+        {                                                                            // spells left -deb
+            castingSpell.SetSpellAnimator();                                    // goes to animate and cast the spell -deb
+            GetComponents<AudioSource>()[0].Play();                             // plays the spell sound -deb
+        }
     }
 
     void ProcessInputs()
@@ -94,27 +108,16 @@ public class orpheus_script : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    private void OnTriggerEnter2D(Collider2D collision)             // checks if collision has a trigger -deb
     {
-        rb.velocity = moveDirection * moveSpeed;
-
-        if (Input.GetKey(KeyCode.DownArrow))
+        if (collision.gameObject.CompareTag("Crystal"))             // checks the tag of the object collided with -deb
         {
-            spellAnima.SetBool("isCastingParalysis", true);
-            castingSpell.CastSpell();
+            crystalCounter.CrystalCollection();                     // if tag is Crystal goes to update the counter -deb
+            Destroy(collision.gameObject);                          // gets rid of crystal Orpheus "picked up" -deb
         }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Crystal"))
+        else if (collision.gameObject.CompareTag("Soul"))           // checks the tag of the object collided with -deb
         {
-            crystalCounter.CrystalCollection();
-            Destroy(collision.gameObject);
-        }
-        else if (collision.gameObject.CompareTag("Soul"))
-        {
-            memCount.MemoryCollection(0.25f);
+            memCount.MemoryCollection(memRegained);                     // if tag is Soul goes to give Orpheus 25% memory -deb
         }
     }
 }
