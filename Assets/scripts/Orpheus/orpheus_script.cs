@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class orpheus_script : MonoBehaviour
 {
@@ -21,9 +22,9 @@ public class orpheus_script : MonoBehaviour
     public MemoryCounter memCount;
     public float memRegained = 0.25f;
 
-    public ParalysisSpellCasting castingSpell;
-    public AudioSource casting;
-    public bool isCastingParalysis;
+    //public ParalysisSpellCasting castingSpell;
+    //public AudioSource casting;
+    public bool isCastingParalysis = false;
 
     public SoulDoors openDoors;
 
@@ -47,11 +48,11 @@ public class orpheus_script : MonoBehaviour
     {
         rb.velocity = moveDirection * moveSpeed;                                // for smother player motion -deb
 
-        if (Input.GetKeyDown(KeyCode.DownArrow) && Updater.paralysisSpells > 0) // checks for spell casting key and if any
-        {                                                                            // spells left -deb
-            castingSpell.SetSpellAnimator();                                    // goes to animate and cast the spell -deb
-            GetComponents<AudioSource>()[0].Play();                             // plays the spell sound -deb
-        }
+        //if (Input.GetKeyDown(KeyCode.DownArrow) && Updater.paralysisSpells > 0) // checks for spell casting key and if any
+        //{                                                                            // spells left -deb
+        //    //castingSpell.SetSpellAnimator();                                    // goes to animate and cast the spell -deb
+        //    GetComponents<AudioSource>()[0].Play();                             // plays the spell sound -deb
+        //}
     }
 
     void ProcessInputs()
@@ -72,6 +73,11 @@ public class orpheus_script : MonoBehaviour
             // This angle has 0 = South, with 90 = East, ...
         }
         //Debug.Log(angleDirection);
+
+        // Paralysis Spell Casting
+        if (Input.GetKey(KeyCode.Space)) {
+            isCastingParalysis = true;
+        }
 
     }
 

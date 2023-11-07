@@ -62,6 +62,11 @@ public class enemy_script : MonoBehaviour
     private int si; // Sprite index
     private float timer;
 
+    // For paralysis spell
+    private orpheus_script orpheusScript;
+    private bool isCastingParalysis = false;
+    private float paralysisDistance = 20f;
+
     void Start() // Runs at the start of the game, before any frames
     {
         rb = GetComponent<Rigidbody2D>();
@@ -73,6 +78,8 @@ public class enemy_script : MonoBehaviour
         wpPos = new Vector2(waypoints[wpi].position.x, waypoints[wpi].position.y);
 
         si = 0;
+
+        orpheusScript = player.GetComponent<orpheus_script>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -98,6 +105,8 @@ public class enemy_script : MonoBehaviour
         UpdateCone();
         // Updates sprite based on angle direction
         UpdateDirectionSprites();
+        // Checks whether paralyzed
+        isCastingParalysis = orpheusScript.isCastingParalysis;
       
     }
 
@@ -108,11 +117,19 @@ public class enemy_script : MonoBehaviour
         enemyPos2D = new Vector2(transform.position.x, transform.position.y);
         playerDist = Vector2.Distance(playerPos2D, enemyPos2D);
         prevPos = transform.position;
-        // Updates Volume of footsteps
-        UpdateFootstepVol();
-        // Updates alert status based on distance to player
-        // Also handles all movement
-        UpdateStatus();   
+        if (isCastingParalysis && playerDist <= paralysisDistance)
+        {
+            rb.velocity = new Vector2(0, 0);
+        }
+        else
+        {
+            // Updates Volume of footsteps
+            UpdateFootstepVol();
+            // Updates alert status based on distance to player
+            // Also handles all movement
+            UpdateStatus();
+        }
+        
     }
 
     private void UpdateStatus()

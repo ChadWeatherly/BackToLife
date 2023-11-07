@@ -5,18 +5,24 @@ using UnityEngine;
 
 public class ParalysisSpellText : MonoBehaviour
 {
+    public GameObject spell;
     private TextMeshProUGUI paralysisSpellTxt;                           // Text Mesh Pro Canvas Spell -deb
+    private paralysis_script paralysisScript;
+    private int numSpells;
 
     // Start is called before the first frame update
     void Start()
     {
         paralysisSpellTxt = GetComponent<TextMeshProUGUI>();             // Accesses text Mesh Pro Canvas Spell -deb
         paralysisSpellTxt.text = "Spells: " + Updater.paralysisSpells; // Updates Canvas with current number of spells -deb
+        paralysisScript = spell.GetComponent<paralysis_script>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        paralysisSpellTxt.text = "Spells: " + Updater.paralysisSpells; // Updates Canvas with new number of spells -deb
+        numSpells = paralysisScript.numParalysisSpells;
+        paralysisSpellTxt.text = "Spells: " + numSpells.ToString();
     }
 }
