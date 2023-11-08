@@ -65,11 +65,7 @@ TextureImporter:
   ignorePngGamma: 0
   applyGammaDecoding: 0
   swizzle: 50462976
-<<<<<<< HEAD:Assets/Art/foresttiles.gif.meta
-  cookieLightType: 1
-=======
   cookieLightType: 0
->>>>>>> master:Assets/Sprites/pk3001-new-piskel-1-png-33-removebg-preview.png.meta
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -85,7 +81,6 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-<<<<<<< HEAD:Assets/Art/foresttiles.gif.meta
     buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -99,8 +94,6 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-=======
->>>>>>> master:Assets/Sprites/pk3001-new-piskel-1-png-33-removebg-preview.png.meta
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0

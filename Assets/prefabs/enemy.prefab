@@ -558,7 +558,6 @@ GameObject:
   - component: {fileID: 5998936044462168000}
   - component: {fileID: 9173897137589415532}
   - component: {fileID: 5911035803311738566}
-  - component: {fileID: 3530960443422549525}
   m_Layer: 0
   m_Name: sightCone
   m_TagString: Untagged
@@ -678,18 +677,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.34676284, y: 0.22248352}
   m_EdgeRadius: 0
---- !u!114 &3530960443422549525
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5416002245250370179}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4e95801c26fc37438dabce2f7df06ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6696965698787992161
 GameObject:
   m_ObjectHideFlags: 0
