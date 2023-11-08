@@ -61,18 +61,25 @@ public class enemy_script : MonoBehaviour
     private string prev_nsew;
     private int si; // Sprite index
     private float timer;
-    private Vector2 lastPosition;
+
+    // For paralysis spell
+    private orpheus_script orpheusScript;
+    private bool isCastingParalysis = false;
+    private float paralysisDistance = 20f;
+
     void Start() // Runs at the start of the game, before any frames
     {
         rb = GetComponent<Rigidbody2D>();
         seeker = GetComponent<Seeker>();
-        lastPosition = new Vector2(transform.position.x, transform.position.y);
+        
         transform.position = spawnPoint.position;
         // Distance to player
         wpi = 1; // Spawns at WayPoint 0, moves towards WayPoint 1
         wpPos = new Vector2(waypoints[wpi].position.x, waypoints[wpi].position.y);
 
         si = 0;
+
+        orpheusScript = player.GetComponent<orpheus_script>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -98,6 +105,8 @@ public class enemy_script : MonoBehaviour
         UpdateCone();
         // Updates sprite based on angle direction
         UpdateDirectionSprites();
+        // Checks whether paralyzed
+        isCastingParalysis = orpheusScript.isCastingParalysis;
       
     }
 
@@ -108,11 +117,19 @@ public class enemy_script : MonoBehaviour
         enemyPos2D = new Vector2(transform.position.x, transform.position.y);
         playerDist = Vector2.Distance(playerPos2D, enemyPos2D);
         prevPos = transform.position;
-        // Updates Volume of footsteps
-        UpdateFootstepVol();
-        // Updates alert status based on distance to player
-        // Also handles all movement
-        UpdateStatus();   
+        if (isCastingParalysis && playerDist <= paralysisDistance)
+        {
+            rb.velocity = new Vector2(0, 0);
+        }
+        else
+        {
+            // Updates Volume of footsteps
+            UpdateFootstepVol();
+            // Updates alert status based on distance to player
+            // Also handles all movement
+            UpdateStatus();
+        }
+        
     }
 
     private void UpdateStatus()
@@ -402,29 +419,18 @@ public class enemy_script : MonoBehaviour
     void UpdateFootstepVol()
     {
         float volume = Mathf.Clamp01(1f - playerDist / maxSoundDistance);
-        float movementMagnitude = GetMovementMagnitude();
         footstep.volume = volume;
-        //volume *= AudioManager.GlobalVolume //this is once we added a slider for the volume
-        if (playerDist <= maxSoundDistance && movementMagnitude > .0001)
+
+        if (playerDist <= maxSoundDistance && !footstep.isPlaying)
         {
-            footstep.volume = volume;
-            if (!footstep.isPlaying)
-            {
-                footstep.Play();
-            }
+            //footstep.time = 0f;
+            Debug.Log("Playing sound");
+            footstep.Play();
         }
         else if (footstep.isPlaying)
         {
             footstep.Pause();
         }
-        lastPosition = new Vector2(transform.position.x, transform.position.y);   
-    
     }
-    private float GetMovementMagnitude()
-    {
-        Vector2 currentPosition = new Vector2(transform.position.x, transform.position.y);
-        float magnitude = (currentPosition - lastPosition).magnitude;
 
-        return magnitude;
-    }
 }
