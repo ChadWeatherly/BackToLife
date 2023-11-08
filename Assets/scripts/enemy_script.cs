@@ -62,6 +62,8 @@ public class enemy_script : MonoBehaviour
     private int si; // Sprite index
     private float timer;
 
+    private Vector2 lastPosition;
+
     // For paralysis spell
     private orpheus_script orpheusScript;
     private bool isCastingParalysis = false;
@@ -419,18 +421,30 @@ public class enemy_script : MonoBehaviour
     void UpdateFootstepVol()
     {
         float volume = Mathf.Clamp01(1f - playerDist / maxSoundDistance);
+        float movementMagnitude = GetMovementMagnitude();
         footstep.volume = volume;
-
-        if (playerDist <= maxSoundDistance && !footstep.isPlaying)
+        //volume *= AudioManager.GlobalVolume //this is once we added a slider for the volume
+        if (playerDist <= maxSoundDistance && movementMagnitude > .0001)
         {
-            //footstep.time = 0f;
-            Debug.Log("Playing sound");
-            footstep.Play();
+            footstep.volume = volume;
+            if (!footstep.isPlaying)
+            {
+                footstep.Play();
+            }
         }
         else if (footstep.isPlaying)
         {
             footstep.Pause();
         }
+        lastPosition = new Vector2(transform.position.x, transform.position.y);
+
+    }
+    private float GetMovementMagnitude()
+    {
+        Vector2 currentPosition = new Vector2(transform.position.x, transform.position.y);
+        float magnitude = (currentPosition - lastPosition).magnitude;
+
+        return magnitude;
     }
 
 }
