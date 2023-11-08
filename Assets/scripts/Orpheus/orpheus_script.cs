@@ -18,10 +18,6 @@ public class orpheus_script : MonoBehaviour
     public List<Sprite> eastSprites;
     public List<Sprite> westSprites;
 
-    public CrystalCounter crystalCounter;
-    public MemoryCounter memCount;
-    public float memRegained = 0.25f;
-
     //public ParalysisSpellCasting castingSpell;
     //public AudioSource casting;
     public bool isCastingParalysis = false;
@@ -116,14 +112,14 @@ public class orpheus_script : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)             // checks if collision has a trigger -deb
     {
-        if (collision.gameObject.CompareTag("Crystal"))             // checks the tag of the object collided with -deb
-        {
-            crystalCounter.CrystalCollection();                     // if tag is Crystal goes to update the counter -deb
-            Destroy(collision.gameObject);                          // gets rid of crystal Orpheus "picked up" -deb
-        }
-        else if (collision.gameObject.CompareTag("Soul"))           // checks the tag of the object collided with -deb
-        {
-            memCount.MemoryCollection(memRegained);                     // if tag is Soul goes to give Orpheus 25% memory -deb
-        }
+        //if (collision.gameObject.CompareTag("Crystal"))             // checks the tag of the object collided with -deb
+        //{
+        //    crystalCounter.CrystalCollection();                     // if tag is Crystal goes to update the counter -deb
+        //    Destroy(collision.gameObject);                          // gets rid of crystal Orpheus "picked up" -deb
+        //}
+        //else if (collision.gameObject.CompareTag("Soul"))           // checks the tag of the object collided with -deb
+        //{
+        //    memCount.MemoryCollection(memRegained);                     // if tag is Soul goes to give Orpheus 25% memory -deb
+        //}
     }
 }

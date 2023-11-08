@@ -14,7 +14,7 @@ public class ParalysisSpellText : MonoBehaviour
     void Start()
     {
         paralysisSpellTxt = GetComponent<TextMeshProUGUI>();             // Accesses text Mesh Pro Canvas Spell -deb
-        paralysisSpellTxt.text = "Spells: " + Updater.paralysisSpells; // Updates Canvas with current number of spells -deb
+        paralysisSpellTxt.text = "Spells: " + 3.ToString();
         paralysisScript = spell.GetComponent<paralysis_script>();
         
     }

@@ -5,15 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class soulfrag : MonoBehaviour
 {
-    public SoulCounter soulFragNum;
     private bool levelComplete = false;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.name == "Orpheus" && !levelComplete)
         {
-
-            soulFragNum.SoulCollection();
             Invoke("ChangeScene", 4);
         }
     }

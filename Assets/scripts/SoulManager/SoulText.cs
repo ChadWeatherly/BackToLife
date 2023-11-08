@@ -11,12 +11,12 @@ public class SoulText : MonoBehaviour
     void Start()
     {
         soulTxt = GetComponent<TextMeshProUGUI>();
-        soulTxt.text = "Soul Fragments: " + Updater.soulFragments;
+        soulTxt.text = "Soul Fragments: ";
     }
 
     // Update is called once per frame
     void Update()
     {
-        soulTxt.text = "Soul Fragments: " + Updater.soulFragments;
+        soulTxt.text = "Soul Fragments: ";
     }
 }
