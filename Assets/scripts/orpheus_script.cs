@@ -25,6 +25,7 @@ public class orpheus_script : MonoBehaviour
     public List<Sprite> eastSprites;
     public List<Sprite> westSprites;
     private List<Sprite> animationSprites;
+    private Sprite restingSprite;
 
     // For spells
     private ParalysisSpell paralysisSpell;
@@ -96,28 +97,32 @@ public class orpheus_script : MonoBehaviour
         if (angleDirection >= 315f || angleDirection < 45f)
         {
             animationSprites = southSprites;
+            restingSprite = southSprites[0];
             nsew = "south";
         }
         else if (angleDirection >= 45f && angleDirection < 135f)
         {
             animationSprites = eastSprites;
+            restingSprite = eastSprites[0];
             nsew = "east";
         }
         else if (angleDirection >= 135f && angleDirection < 225f)
         {
             animationSprites = northSprites;
+            restingSprite = northSprites[0];
             nsew = "north";
         }
         else
         {
             animationSprites = westSprites;
+            restingSprite = westSprites[0];
             nsew = "west";
         }
 
         // If direction changes
         if (rb.velocity.magnitude == 0)
         {
-            characterSprite.sprite = animationSprites[0];
+            characterSprite.sprite = restingSprite;
         }
         else if (nsew != prev_nsew)
         {
