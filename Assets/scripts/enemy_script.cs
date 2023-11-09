@@ -7,13 +7,14 @@ using Pathfinding;
 public class enemy_script : MonoBehaviour
 {
     public CaughtScreenManager caughtScreenManager;
+
+    // Basic movement parameters and general variables
     public Transform[] waypoints;  // Array of patrol waypoints, as Transforms
     public Transform spawnPoint;
     public float moveSpeed = 1.5f;
     public float stoppingDistance = 0.1f;
     public float stuckDist = 0.25f; // If move less than less, recalculate path
     public float animateTime;
-    public GameObject sightCone;
     public GameObject player;
 
     // For sound
@@ -44,7 +45,10 @@ public class enemy_script : MonoBehaviour
     private string prevStatus = "start";
     public float susDist = 8f; // sus threshold
     public float atkDist = 3f; // attack threshold (for now)
-    public SpriteRenderer coneSprite;
+
+    // For controlling the cone
+    public GameObject sightCone;
+    private SpriteRenderer coneSprite;
     // Made new colors to let the cone be translucent (final value, alpha, is transparency)
     private readonly Color coneRed = new Color(1, 0, 0, 0.1f);
     private readonly Color coneYellow = new Color(1, 0.92f, 0.016f, 0.1f);
@@ -62,18 +66,16 @@ public class enemy_script : MonoBehaviour
     private int si; // Sprite index
     private float timer;
 
-    private Vector2 lastPosition;
-
     // For paralysis spell
-    private orpheus_script orpheusScript;
-    private bool isCastingParalysis = false;
-    private float paralysisDistance = 20f;
+    private ParalysisSpell paralysisSpell;
 
     void Start() // Runs at the start of the game, before any frames
     {
         rb = GetComponent<Rigidbody2D>();
         seeker = GetComponent<Seeker>();
-        
+        paralysisSpell = player.GetComponentInChildren<ParalysisSpell>();
+        coneSprite = sightCone.GetComponent<SpriteRenderer>();
+
         transform.position = spawnPoint.position;
         // Distance to player
         wpi = 1; // Spawns at WayPoint 0, moves towards WayPoint 1
@@ -81,7 +83,7 @@ public class enemy_script : MonoBehaviour
 
         si = 0;
 
-        orpheusScript = player.GetComponent<orpheus_script>();
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -102,14 +104,13 @@ public class enemy_script : MonoBehaviour
 
     void Update() // Updates each frame
     {
-
+        // Updates alert status based on distance to player
+        // Also handles all movement
+        UpdateStatus();
         // Update Cone characteristics (Angle, position, color)
         UpdateCone();
         // Updates sprite based on angle direction
         UpdateDirectionSprites();
-        // Checks whether paralyzed
-        isCastingParalysis = orpheusScript.isCastingParalysis;
-      
     }
 
     private void FixedUpdate()
@@ -119,26 +120,25 @@ public class enemy_script : MonoBehaviour
         enemyPos2D = new Vector2(transform.position.x, transform.position.y);
         playerDist = Vector2.Distance(playerPos2D, enemyPos2D);
         prevPos = transform.position;
-        if (isCastingParalysis && playerDist <= paralysisDistance)
-        {
-            rb.velocity = new Vector2(0, 0);
-        }
-        else
-        {
-            // Updates Volume of footsteps
-            UpdateFootstepVol();
-            // Updates alert status based on distance to player
-            // Also handles all movement
-            UpdateStatus();
-        }
         
+        
+        // Updates Volume of footsteps
+        UpdateFootstepVol();
     }
 
     private void UpdateStatus()
     {
         prevStatus = currStatus;
-        
-        if (playerDist <= atkDist) // if aggro
+
+        if (paralysisSpell.isCastingParalysis &&
+
+            (playerDist <= paralysisSpell.paralysisDistance ||
+            prevStatus == "paralyzed"))
+        {
+            currStatus = "paralyzed";
+            moveSpeed = 0f;
+        }
+        else if (playerDist <= atkDist) // if aggro
         {
             currStatus = "aggro";
             moveSpeed = 2.25f;
@@ -149,11 +149,10 @@ public class enemy_script : MonoBehaviour
         }
         else if (playerDist <= susDist) // if sus
         {
-            Debug.Log(playerDist);
             currStatus = "sus";
             moveSpeed = 2f;
             patrol = false;
-            
+
             if (prevStatus != "sus") // if status changes, make new path
             {
                 pathExists = false;
@@ -210,6 +209,43 @@ public class enemy_script : MonoBehaviour
                                     OnPathComplete);
             }
         }
+    }
+
+    // Method to update the Cone color and position
+    private void UpdateCone()
+    {
+        if (currStatus == "paralyzed")
+        {
+            rb.velocity = new Vector2(0, 0);
+            coneSprite.color = new Color(0, 0, 0, 0); // makes cone invisible
+        }
+        else
+        {
+            // Rotates the cone towards NPC facing direction
+            Vector3 angles = new Vector3(0, 0, direction);
+            // Changes cone position to go around NPC
+            Vector3 position = new Vector3(rb.velocity.normalized.x * 5f,
+                rb.velocity.normalized.y * 6.0f,
+                0);
+            sightCone.transform.eulerAngles = angles;
+            sightCone.transform.position = transform.position + position;
+            //Debug.Log(position);
+
+            // Updates color of cone based on distance
+            switch (currStatus)
+            {
+                case "calm":
+                    coneSprite.color = coneGreen;
+                    return;
+                case "sus":
+                    coneSprite.color = coneYellow;
+                    return;
+                case "aggro":
+                    coneSprite.color = coneRed;
+                    return;
+            }
+        }
+
     }
 
     private void OnPathComplete (Path p)
@@ -312,33 +348,7 @@ public class enemy_script : MonoBehaviour
         else { return; }
     }
 
-    // Method to update the Cone color and position
-    private void UpdateCone()
-    {
-        // Rotates the cone towards NPC facing direction
-        Vector3 angles = new Vector3(0, 0, direction);
-        // Changes cone position to go around NPC
-        Vector3 position = new Vector3(rb.velocity.normalized.x*5f,
-            rb.velocity.normalized.y*6.0f,
-            0);
-        sightCone.transform.eulerAngles = angles;
-        sightCone.transform.position = transform.position + position;
-        //Debug.Log(position);
-
-        // Updates color of cone based on distance
-        switch (currStatus)
-        {
-            case "calm":
-                coneSprite.color = coneGreen;
-                return;
-            case "sus":
-                coneSprite.color = coneYellow;
-                return;
-            case "aggro":
-                coneSprite.color = coneRed;
-                return;
-        }
-    }
+    
 
     // Updates sprite based on direction
     void UpdateDirectionSprites()
@@ -420,11 +430,11 @@ public class enemy_script : MonoBehaviour
 
     void UpdateFootstepVol()
     {
+        
         float volume = Mathf.Clamp01(1f - playerDist / maxSoundDistance);
-        float movementMagnitude = GetMovementMagnitude();
         footstep.volume = volume;
         //volume *= AudioManager.GlobalVolume //this is once we added a slider for the volume
-        if (playerDist <= maxSoundDistance && movementMagnitude > .0001)
+        if (playerDist <= maxSoundDistance && rb.velocity.magnitude > .0001)
         {
             footstep.volume = volume;
             if (!footstep.isPlaying)
@@ -436,15 +446,7 @@ public class enemy_script : MonoBehaviour
         {
             footstep.Pause();
         }
-        lastPosition = new Vector2(transform.position.x, transform.position.y);
-
-    }
-    private float GetMovementMagnitude()
-    {
-        Vector2 currentPosition = new Vector2(transform.position.x, transform.position.y);
-        float magnitude = (currentPosition - lastPosition).magnitude;
-
-        return magnitude;
+        
     }
 
 }
