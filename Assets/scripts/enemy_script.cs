@@ -211,6 +211,8 @@ public class enemy_script : MonoBehaviour
         }
     }
 
+
+    
     // Method to update the Cone color and position
     private void UpdateCone()
     {
