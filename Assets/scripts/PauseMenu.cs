@@ -15,7 +15,14 @@ public class PauseMenu : MonoBehaviour
     public GameObject pauseMenuUI;
     public GameObject optionMenuUI;
     private void Start(){
-        SetVolume();
+        if(PlayerPrefs.HasKey("SFXVolume")){
+            LoadVolume();
+            LoadMusicVolume();
+
+        }else{
+            SetVolume();
+            SetMusicVolume();
+        }
     }
     void Update() {
         if(Input.GetKeyDown(KeyCode.Escape)){
@@ -46,14 +53,32 @@ public class PauseMenu : MonoBehaviour
         AudioListener.pause = true;
     }
     public void QuitGame(){
+        PlayerPrefs.SetString("lastScene", SceneManager.GetActiveScene().name);
+        PlayerPrefs.Save();
+        Time.timeScale = 1f;
+        GameIsPaused = false;
+        Debug.Log("Game is resumed");
+        AudioListener.pause = false;
         SceneManager.LoadScene("Menuscreen");
+
     }
     public void SetVolume(){
         float sfx = SFXSlider.value;
         SFXMixer.SetFloat("SFX",Mathf.Log10(sfx)*20);
+        PlayerPrefs.SetFloat("SFXVolume", sfx);
+    }
+    public void LoadVolume(){
+        SFXSlider.value = PlayerPrefs.GetFloat("SFXVolume");
+        SetVolume();
     }
     public void SetMusicVolume(){
         float music = MusicSlider.value;
         MusicMixer.SetFloat("Music",Mathf.Log10(music)*20);
+        PlayerPrefs.SetFloat("MusicVolume", music);
     }
+    public void LoadMusicVolume(){
+        MusicSlider.value = PlayerPrefs.GetFloat("MusicVolume");
+        SetMusicVolume();
+    }
+
 }
