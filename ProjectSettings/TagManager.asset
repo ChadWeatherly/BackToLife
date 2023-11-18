@@ -10,11 +10,12 @@ TagManager:
   - Soul
   - Enemies
   - Key
+  - Grabbable
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Grabbable
   - Water
   - UI
   - Impassable Objects
