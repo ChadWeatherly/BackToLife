@@ -11,6 +11,7 @@ TagManager:
   - Enemies
   - Key
   - Grabbable
+  - BoxDetector
   layers:
   - Default
   - TransparentFX

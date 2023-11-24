@@ -454,7 +454,7 @@ MonoBehaviour:
   player: {fileID: 2116798045378936174, guid: 0b5eb923dd4adc04cb7cf4bff705e493, type: 3}
   maxSoundDistance: 20
   footstep: {fileID: 3869814491984808493}
-  susDist: 6
+  susDist: 5
   atkDist: 4
   sightCone: {fileID: 5416002245250370179}
   characterSprite: {fileID: 8827835582821368430}
