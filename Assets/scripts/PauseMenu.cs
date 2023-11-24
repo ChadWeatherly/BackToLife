@@ -7,22 +7,12 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] private AudioMixer SFXMixer;
-    [SerializeField] private AudioMixer MusicMixer;
-    [SerializeField] private Slider SFXSlider;
-    [SerializeField] private Slider MusicSlider;
+    [SerializeField] private AudioMixer mainVolume;
+    [SerializeField] private Slider VolumeSlider;
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
-    public GameObject optionMenuUI;
     private void Start(){
-        if(PlayerPrefs.HasKey("SFXVolume")){
-            LoadVolume();
-            LoadMusicVolume();
-
-        }else{
-            SetVolume();
-            SetMusicVolume();
-        }
+        SetVolume();
     }
     void Update() {
         if(Input.GetKeyDown(KeyCode.Escape)){
@@ -31,6 +21,7 @@ public class PauseMenu : MonoBehaviour
                 Resume();
             } else
             {
+                
                 Pause();
             }
         }
@@ -38,7 +29,6 @@ public class PauseMenu : MonoBehaviour
     public void Resume()
     {
         pauseMenuUI.SetActive(false);
-        optionMenuUI.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
         Debug.Log("Game is resumed");
@@ -53,32 +43,10 @@ public class PauseMenu : MonoBehaviour
         AudioListener.pause = true;
     }
     public void QuitGame(){
-        PlayerPrefs.SetString("lastScene", SceneManager.GetActiveScene().name);
-        PlayerPrefs.Save();
-        Time.timeScale = 1f;
-        GameIsPaused = false;
-        Debug.Log("Game is resumed");
-        AudioListener.pause = false;
         SceneManager.LoadScene("Menuscreen");
-
     }
     public void SetVolume(){
-        float sfx = SFXSlider.value;
-        SFXMixer.SetFloat("SFX",Mathf.Log10(sfx)*20);
-        PlayerPrefs.SetFloat("SFXVolume", sfx);
+        float volume = VolumeSlider.value;
+        mainVolume.SetFloat("SFX",Mathf.Log10(volume)*20);
     }
-    public void LoadVolume(){
-        SFXSlider.value = PlayerPrefs.GetFloat("SFXVolume");
-        SetVolume();
-    }
-    public void SetMusicVolume(){
-        float music = MusicSlider.value;
-        MusicMixer.SetFloat("Music",Mathf.Log10(music)*20);
-        PlayerPrefs.SetFloat("MusicVolume", music);
-    }
-    public void LoadMusicVolume(){
-        MusicSlider.value = PlayerPrefs.GetFloat("MusicVolume");
-        SetMusicVolume();
-    }
-
 }

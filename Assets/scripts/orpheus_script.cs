@@ -32,10 +32,6 @@ public class orpheus_script : MonoBehaviour
 
     public SoulDoors openDoors;
 
-    public AudioSource footStepAudioSource;
-    private Vector2 lastPosition;
-    public float movementThreshold = 0.003f;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -43,7 +39,6 @@ public class orpheus_script : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         paralysisSpell = GetComponentInChildren<ParalysisSpell>();
         prev_nsew = "none";
-        lastPosition = new Vector2(transform.position.x, transform.position.y);
     }
 
     // Update is called once per frame
@@ -52,8 +47,7 @@ public class orpheus_script : MonoBehaviour
         ProcessInputs();
         Move();
         AnimateSprite();
-        PlayFootstepSound();
-        lastPosition = new Vector2(transform.position.x, transform.position.y);
+
     }
 
     private void FixedUpdate()
@@ -165,31 +159,5 @@ public class orpheus_script : MonoBehaviour
         //{
         //    memCount.MemoryCollection(memRegained);                     // if tag is Soul goes to give Orpheus 25% memory -deb
         //}
-    }
-        private void PlayFootstepSound()
-    {
-        float movementMagnitude = GetMovementMagnitude();
-        if (movementMagnitude > movementThreshold)
-        {
-            if (!footStepAudioSource.isPlaying)
-            {
-                footStepAudioSource.Play();
-            }
-        }
-        else
-        {
-            if (footStepAudioSource.isPlaying)
-            {
-                footStepAudioSource.Stop();
-            }
-        }
-    }
-    private float GetMovementMagnitude()
-    {
-        Vector2 currentPosition = new Vector2(transform.position.x, transform.position.y);
-        float magnitude = (currentPosition - lastPosition).magnitude;
-
-        // Debug information to the console
-        return magnitude;
     }
 }
