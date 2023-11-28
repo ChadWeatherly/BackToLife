@@ -5,14 +5,14 @@ using UnityEngine;
 public class DoorOpener : MonoBehaviour
 {
     public GotKey key;
-    public GateButton button;
+    //public GateButton button;
 
     private void Update()
     {
-        if (button.gateOpen)
-        {
-            Destroy(gameObject);
-        }
+        //if (button.gateOpen)
+        //{
+        //    Destroy(gameObject);
+        //}
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

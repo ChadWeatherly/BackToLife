@@ -12,6 +12,7 @@ public class orpheus_script : MonoBehaviour
     public Rigidbody2D rb;
     private Vector2 moveDirection;
     private float angleDirection;
+    public GameManager gameManager;
 
     // Info for animation
     public float animateTime = 0.25f;
@@ -49,10 +50,17 @@ public class orpheus_script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ProcessInputs();
-        Move();
-        AnimateSprite();
-        PlayFootstepSound();
+        if (gameManager.isPaused)
+        {
+            moveSpeed = 0f;
+        }
+        else
+        {
+            ProcessInputs();
+            Move();
+            AnimateSprite();
+            PlayFootstepSound();
+        }
         lastPosition = new Vector2(transform.position.x, transform.position.y);
     }
 

@@ -6,7 +6,7 @@ using Pathfinding;
 
 public class enemy_script : MonoBehaviour
 {
-    public CaughtScreenManager caughtScreenManager;
+    public GameManager gameManager;
 
     // Basic movement parameters and general variables
     public Transform[] waypoints;  // Array of patrol waypoints, as Transforms
@@ -34,17 +34,17 @@ public class enemy_script : MonoBehaviour
     private bool patrol = true; // Bool to tell us whether enemy is back on waypoint path
     private bool pathExists = false; // finds whether a path has been completed or not
     private List<Vector3> vpath; // current vector path
-    private Vector3 prevPos; // Previous position, so if character gets stuck, makes new path
 
     private float direction; // Angular direction of character, where 0/360 deg is South
 
-    private float playerDist; // Distance to player
+    private float playerDist = 100f; // Distance to player
     private Vector2 playerPos2D;
     private Vector2 enemyPos2D;
     private string currStatus = "calm"; // calm, sus, aggro
     private string prevStatus = "start";
-    public float susDist = 8f; // sus threshold
-    public float atkDist = 3f; // attack threshold (for now)
+    public float susDist = 12f; // sus threshold
+    public float atkDist = 8f; // attack threshold (for now)
+    public float caughtDist = 4f;
 
     // For controlling the cone
     public GameObject sightCone;
@@ -82,35 +82,29 @@ public class enemy_script : MonoBehaviour
         wpPos = new Vector2(waypoints[wpi].position.x, waypoints[wpi].position.y);
 
         si = 0;
-
         
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject == player) // Checks if collision is with the player
-        {
-            if (caughtScreenManager != null)
-            {
-                caughtScreenManager.ShowCaughtScreen();
-            }
-            else
-            {
-                Debug.LogError("CaughtScreenManager not assigned in the enemy script!");
-            }
-        }
-    }
-
-
     void Update() // Updates each frame
     {
-        // Updates alert status based on distance to player
-        // Also handles all movement
-        UpdateStatus();
-        // Update Cone characteristics (Angle, position, color)
-        UpdateCone();
-        // Updates sprite based on angle direction
-        UpdateDirectionSprites();
+        if (gameManager.isPaused)
+        {
+            moveSpeed = 0f;
+        }
+        else if (playerDist <= caughtDist)
+        {
+            gameManager.isPaused = true;
+        }
+        else if (!gameManager.isPaused)
+        {
+            // Updates alert status based on distance to player
+            // Also handles all movement
+            UpdateStatus();
+            // Update Cone characteristics (Angle, position, color)
+            UpdateCone();
+            // Updates sprite based on angle direction
+            UpdateDirectionSprites();
+        }
     }
 
     private void FixedUpdate()
@@ -118,9 +112,7 @@ public class enemy_script : MonoBehaviour
         //Debug.Log(playerDist);
         playerPos2D = new Vector2(player.transform.position.x, player.transform.position.y);
         enemyPos2D = new Vector2(transform.position.x, transform.position.y);
-        playerDist = Vector2.Distance(playerPos2D, enemyPos2D);
-        prevPos = transform.position;
-        
+        playerDist = Vector2.Distance(playerPos2D, enemyPos2D);        
         
         // Updates Volume of footsteps
         UpdateFootstepVol();

@@ -46,6 +46,7 @@ public class CaughtScreenManager : MonoBehaviour
         // Check if the caught screen is assigned
         if (caughtScreen != null)
         {
+            //Time.timeScale = 0f;
             // Reset the fade timer and set the fading flag to true
             fadeTimer = 0f;
             isFadingIn = true;

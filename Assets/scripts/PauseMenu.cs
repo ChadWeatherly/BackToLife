@@ -6,6 +6,9 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
+
+    public GameManager gameManager;
+
     // Start is called before the first frame update
     [SerializeField] private AudioMixer SFXMixer;
     [SerializeField] private AudioMixer MusicMixer;
@@ -39,6 +42,7 @@ public class PauseMenu : MonoBehaviour
     {
         pauseMenuUI.SetActive(false);
         optionMenuUI.SetActive(false);
+        gameManager.isPaused = false;
         Time.timeScale = 1f;
         GameIsPaused = false;
         Debug.Log("Game is resumed");
@@ -47,6 +51,7 @@ public class PauseMenu : MonoBehaviour
     public void Pause()
     {
         pauseMenuUI.SetActive(true);
+        gameManager.isPaused = true;
         Time.timeScale = 0f;
         GameIsPaused = true;
         Debug.Log("Game is paused");

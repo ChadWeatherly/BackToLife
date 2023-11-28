@@ -1,22 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
-public class CrystalText : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
-    private TextMeshProUGUI crystalTxt;
+
+    private int level = 1;
+    public bool isPaused = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        crystalTxt = GetComponent<TextMeshProUGUI>();
-        crystalTxt.text = "Crystals: ";
+        DontDestroyOnLoad(gameObject);
+        isPaused = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        crystalTxt.text = "Crystals: ";
+        //print(isPaused);
     }
 }
