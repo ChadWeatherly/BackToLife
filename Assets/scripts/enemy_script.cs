@@ -93,7 +93,7 @@ public class enemy_script : MonoBehaviour
         }
         else if (playerDist <= caughtDist)
         {
-            gameManager.isPaused = true;
+            gameManager.caught = true;
         }
         else if (!gameManager.isPaused)
         {
