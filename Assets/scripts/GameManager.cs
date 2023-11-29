@@ -6,7 +6,6 @@ public class GameManager : MonoBehaviour
     private int level = 1;
     public bool isPaused = false;
     public bool caught = false;
-    private GameObject ui;
     public GameObject caughtScreen;
 
     // Start is called before the first frame update
@@ -15,7 +14,6 @@ public class GameManager : MonoBehaviour
         //DontDestroyOnLoad(gameObject);
         isPaused = false;
         caught = false;
-        ui = GameObject.Find("UI");
         
     }
 

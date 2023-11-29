@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class ParalysisSpell : MonoBehaviour
 {
-    public float paralysisDistance = 20f;
-    public float animateTime = 0.25f;
+    public float paralysisDistance = 7f;
+    public float animateTime = 0.2f;
     public List<Sprite> paralysisSpellSprites;
     public int numParalysisSpells = 3;
     public bool isCastingParalysis = false;
@@ -16,6 +16,8 @@ public class ParalysisSpell : MonoBehaviour
     private SpriteRenderer sprite;
     private bool stopAnimating = false;
     private float animateTimer = 0f;
+    private bool rotate;
+    private float rotationAngle = 2.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -36,27 +38,33 @@ public class ParalysisSpell : MonoBehaviour
 
     public void Cast()
     {
-        if (wasCasting)
+        if (numParalysisSpells > 0)
         {
-            paralysisTimer += Time.deltaTime;
-            if (paralysisTimer >= paralysisTime)
+            if (wasCasting)
             {
-                isCastingParalysis = false;
-                stopAnimating = true;
-                wasCasting = false;
-                sprite.sprite = null;
+                paralysisTimer += Time.deltaTime;
+                if (paralysisTimer >= paralysisTime)
+                {
+                    isCastingParalysis = false;
+                    stopAnimating = true;
+                    rotate = false;
+                    wasCasting = false;
+                    sprite.sprite = null;
+                }
             }
+            else
+            {
+                paralysisTimer = 0f;
+                animateTimer = 0;
+                spriteIndex = 0;
+                numParalysisSpells -= 1;
+                wasCasting = true;
+                stopAnimating = false;
+                rotate = false;
+            }
+            AnimateParalysis();
         }
-        else
-        {
-            paralysisTimer = 0f;
-            animateTimer = 0;
-            spriteIndex = 0;
-            numParalysisSpells -= 1;
-            wasCasting = true;
-            stopAnimating = false;
-        }
-        AnimateParalysis();
+        
     }
 
     void AnimateParalysis() // Animates the paralysis spell from Orpheus
@@ -73,8 +81,23 @@ public class ParalysisSpell : MonoBehaviour
                 if (spriteIndex >= paralysisSpellSprites.ToArray().Length)
                 {
                     stopAnimating = true;
-                    gameObject.transform.localScale = new Vector3(2, 2, 2);
+                    rotate = true;
+                    float scale = 3.5f;
+                    gameObject.transform.localScale = new Vector3(scale, scale, scale);
+                    animateTimer = 0f;
                 }
+            }
+        }
+        else if (rotate)
+        {
+            animateTimer += Time.deltaTime;
+            if (animateTimer >= animateTime)
+            {
+                // rotate
+                print("rotate");
+                Vector3 angles = new Vector3(0, 0, gameObject.transform.eulerAngles.z + rotationAngle);
+                gameObject.transform.eulerAngles = angles;
+                animateTimer = 0f;
             }
         }
     }

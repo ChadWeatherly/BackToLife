@@ -5,29 +5,66 @@ using UnityEngine;
 public class DoorOpener : MonoBehaviour
 {
     public GotKey key;
-    public Sprite openDoor;
-    public Sprite closedDoor;
+    public List<Sprite> spriteList;
+    public GameObject textBubble;
 
     private SpriteRenderer doorSprite;
+    private int si; // sprite index
+    private float animateTime = 0.3f;
+    private float spriteTimer;
+    private bool animate;
+    public string doorStatus;
+    private BoxCollider2D boxCol;
 
     private void Start()
     {
         doorSprite = GetComponent<SpriteRenderer>();
-        doorSprite.sprite = closedDoor;
+        doorSprite.sprite = spriteList[0];
+        spriteTimer = 0;
+        si = 1;
+        animate = false;
+        doorStatus = "closed";
+        boxCol = GetComponent<BoxCollider2D>();
+        textBubble.SetActive(false);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Orpheus")
+        if (collision.gameObject.tag == "Orpheus" && key.gotKey)
         {
-            if (key.gotKey)
-            {
-                Destroy(gameObject);
-            }
+            animate = true;
         }
-        else
+        else if (doorStatus == "closed")
         {
-            // do pop up screen
+            textBubble.SetActive(true);
+        }
+    }
+
+    private void Update()
+    {
+        if (animate)
+        {
+            AnimateDoor();
+        }
+        if (doorStatus == "open")
+        {
+            boxCol.enabled = false;
+        }
+    }
+
+    private void AnimateDoor()
+    {
+        spriteTimer += Time.deltaTime;
+        if (spriteTimer >= animateTime)
+        {
+            spriteTimer = 0f;
+            doorSprite.sprite = spriteList[si];
+            si++;
+            if (si >= spriteList.ToArray().Length)
+            {
+                animate = false;
+                doorStatus = "open";
+            }
         }
     }
 }
