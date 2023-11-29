@@ -10,9 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 685558261708369138}
   - component: {fileID: 6498690687271701047}
-  - component: {fileID: 779801256324977928}
   - component: {fileID: 5460779919799653531}
-  - component: {fileID: 990111912390204963}
   - component: {fileID: 6202108517817027779}
   m_Layer: 0
   m_Name: bigdoor
@@ -88,27 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &779801256324977928
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2663162844457988018}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 386939cb418293b4a97527581a6e9fa6, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!61 &5460779919799653531
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -154,20 +131,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.48, y: 0.2356408}
   m_EdgeRadius: 0
---- !u!114 &990111912390204963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2663162844457988018}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb641793fbe4cce4cad8ea92e296a582, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  soulDoorLeft: {fileID: 779801256324977928}
-  soulDoorRight: {fileID: 0}
 --- !u!114 &6202108517817027779
 MonoBehaviour:
   m_ObjectHideFlags: 0

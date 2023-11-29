@@ -5,14 +5,15 @@ using UnityEngine;
 public class DoorOpener : MonoBehaviour
 {
     public GotKey key;
-    //public GateButton button;
+    public Sprite openDoor;
+    public Sprite closedDoor;
 
-    private void Update()
+    private SpriteRenderer doorSprite;
+
+    private void Start()
     {
-        //if (button.gateOpen)
-        //{
-        //    Destroy(gameObject);
-        //}
+        doorSprite = GetComponent<SpriteRenderer>();
+        doorSprite.sprite = closedDoor;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -23,6 +24,10 @@ public class DoorOpener : MonoBehaviour
             {
                 Destroy(gameObject);
             }
+        }
+        else
+        {
+            // do pop up screen
         }
     }
 }

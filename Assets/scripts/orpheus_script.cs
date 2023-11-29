@@ -13,6 +13,7 @@ public class orpheus_script : MonoBehaviour
     private Vector2 moveDirection;
     private float angleDirection;
     public GameManager gameManager;
+    private Vector2 lastPosition;
 
     // Info for animation
     public float animateTime = 0.25f;
@@ -31,10 +32,9 @@ public class orpheus_script : MonoBehaviour
     // For spells
     private ParalysisSpell paralysisSpell;
 
-    public SoulDoors openDoors;
+    //public SoulDoors openDoors;
 
     public AudioSource footStepAudioSource;
-    private Vector2 lastPosition;
     public float movementThreshold = 0.003f;
 
     // Start is called before the first frame update
@@ -45,14 +45,16 @@ public class orpheus_script : MonoBehaviour
         paralysisSpell = GetComponentInChildren<ParalysisSpell>();
         prev_nsew = "none";
         lastPosition = new Vector2(transform.position.x, transform.position.y);
+        restingSprite = southSprites[0];
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (gameManager.isPaused)
+        if (gameManager.isPaused || gameManager.caught)
         {
             moveSpeed = 0f;
+            characterSprite.sprite = restingSprite;
         }
         else
         {
@@ -66,7 +68,7 @@ public class orpheus_script : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.velocity = moveDirection * moveSpeed;                                // for smother player motion -de
+        rb.velocity = moveDirection * moveSpeed;   // for smoother player motion -de
     }
 
     void ProcessInputs()
