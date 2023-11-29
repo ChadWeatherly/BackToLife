@@ -6,7 +6,7 @@ public class ParalysisSpell : MonoBehaviour
     public float paralysisDistance = 7f;
     public float animateTime = 0.2f;
     public List<Sprite> paralysisSpellSprites;
-    public int numParalysisSpells = 3;
+    public int numParalysisSpells = 5;
     public bool isCastingParalysis = false;
 
     private float paralysisTime = 5f;
