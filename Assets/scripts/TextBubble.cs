@@ -26,7 +26,7 @@ public class TextBubble : MonoBehaviour
     {
         //sentences = new Queue<string>();
         //textBubblePanel.SetActive(false); // Hide at start
-
+        gameObject.SetActive(false);
         aliveTimer = 0f;
         wasEnabled = false;
         enable = false;

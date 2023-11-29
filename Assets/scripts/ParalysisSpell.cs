@@ -50,6 +50,7 @@ public class ParalysisSpell : MonoBehaviour
                     rotate = false;
                     wasCasting = false;
                     sprite.sprite = null;
+                    numParalysisSpells -= 1;
                 }
             }
             else
@@ -57,19 +58,18 @@ public class ParalysisSpell : MonoBehaviour
                 paralysisTimer = 0f;
                 animateTimer = 0;
                 spriteIndex = 0;
-                numParalysisSpells -= 1;
                 wasCasting = true;
                 stopAnimating = false;
                 rotate = false;
             }
-            AnimateParalysis();
+            
         }
-        
+        AnimateParalysis();
     }
 
     void AnimateParalysis() // Animates the paralysis spell from Orpheus
     {
-        if (!stopAnimating)
+        if (!stopAnimating && numParalysisSpells > 0)
         {
             sprite.sprite = paralysisSpellSprites[spriteIndex];
             animateTimer += Time.deltaTime;
@@ -94,7 +94,6 @@ public class ParalysisSpell : MonoBehaviour
             if (animateTimer >= animateTime)
             {
                 // rotate
-                print("rotate");
                 Vector3 angles = new Vector3(0, 0, gameObject.transform.eulerAngles.z + rotationAngle);
                 gameObject.transform.eulerAngles = angles;
                 animateTimer = 0f;

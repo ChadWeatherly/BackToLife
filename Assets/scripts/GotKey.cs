@@ -9,23 +9,18 @@ public class GotKey : MonoBehaviour
     public GameObject keyHUD;
     public DoorOpener door;
     private Image HUDimage;
-    private Sprite keySprite;
+    public Sprite keySprite;
     private Color spriteColor;
 
     private void Start()
     {
-        HUDimage = keyHUD.GetComponent<Image>();
-        spriteColor = new Color(HUDimage.color.r,
-                                HUDimage.color.g,
-                                HUDimage.color.b,
-                                1f);
-        HUDimage.sprite = null;
-        spriteColor = new Color(HUDimage.color.r,
-                                HUDimage.color.g,
-                                HUDimage.color.b,
-                                1f);
-        HUDimage.color = new Color(0, 0, 0, 0);
         keySprite = GetComponent<SpriteRenderer>().sprite;
+        //spriteColor
+
+        HUDimage = keyHUD.GetComponent<Image>();
+        HUDimage.sprite = null;
+        HUDimage.color = Color.clear;
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -34,7 +29,7 @@ public class GotKey : MonoBehaviour
         {
             gotKey = true;
             HUDimage.sprite = keySprite;
-            HUDimage.color = spriteColor;
+            HUDimage.color = Color.white;
             Destroy(gameObject);
         }
 

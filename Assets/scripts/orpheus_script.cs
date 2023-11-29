@@ -16,7 +16,7 @@ public class orpheus_script : MonoBehaviour
     private Vector2 lastPosition;
 
     // Info for animation
-    public float animateTime = 0.25f;
+    private float animateTime = 0.2f;
     private string nsew; // North, South, East, West
     private string prev_nsew;
     private int si; // Sprite index

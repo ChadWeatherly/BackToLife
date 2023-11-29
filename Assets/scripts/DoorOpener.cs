@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DoorOpener : MonoBehaviour
 {
     public GotKey key;
     public List<Sprite> spriteList;
     public GameObject textBubble;
+    public GameObject keyHUD;
 
+    private Image HUDimage;
     private SpriteRenderer doorSprite;
     private int si; // sprite index
     private float animateTime = 0.3f;
@@ -18,6 +21,7 @@ public class DoorOpener : MonoBehaviour
 
     private void Start()
     {
+        HUDimage = keyHUD.GetComponent<Image>();
         doorSprite = GetComponent<SpriteRenderer>();
         doorSprite.sprite = spriteList[0];
         spriteTimer = 0;
@@ -30,14 +34,17 @@ public class DoorOpener : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Orpheus" && key.gotKey)
-        {
-            animate = true;
-        }
-        else if (doorStatus == "closed")
-        {
-            textBubble.SetActive(true);
-        }
+        if (collision.gameObject.tag == "Orpheus")
+            if (key.gotKey)
+            {
+                animate = true;
+                HUDimage.sprite = null;
+                HUDimage.color = Color.clear;
+            }
+            else if (doorStatus == "closed")
+            {
+                textBubble.SetActive(true);
+            }
     }
 
     private void Update()
