@@ -11,7 +11,7 @@ public class ParalysisSpell : MonoBehaviour
 
     private float paralysisTime = 5f;
     private float paralysisTimer = 0f;
-    private bool wasCasting = false;
+    public bool wasCasting = false;
     private int spriteIndex = 0;
     private SpriteRenderer sprite;
     private bool stopAnimating = false;
@@ -44,6 +44,7 @@ public class ParalysisSpell : MonoBehaviour
                 isCastingParalysis = false;
                 stopAnimating = true;
                 wasCasting = false;
+                sprite.sprite = null;
             }
         }
         else
@@ -72,7 +73,7 @@ public class ParalysisSpell : MonoBehaviour
                 if (spriteIndex >= paralysisSpellSprites.ToArray().Length)
                 {
                     stopAnimating = true;
-                    sprite.sprite = null;
+                    gameObject.transform.localScale = new Vector3(2, 2, 2);
                 }
             }
         }

@@ -37,14 +37,14 @@ public class enemy_script : MonoBehaviour
 
     private float direction; // Angular direction of character, where 0/360 deg is South
 
-    private float playerDist = 100f; // Distance to player
+    public float playerDist = 100f; // Distance to player
     private Vector2 playerPos2D;
     private Vector2 enemyPos2D;
     private string currStatus = "calm"; // calm, sus, aggro
     private string prevStatus = "start";
-    public float susDist = 12f; // sus threshold
-    public float atkDist = 8f; // attack threshold (for now)
-    public float caughtDist = 4f;
+    private float susDist = 12f; // sus threshold
+    private float atkDist = 7.5f; // attack threshold (for now)
+    private float caughtDist = 3.5f;
 
     // For controlling the cone
     public GameObject sightCone;
@@ -87,11 +87,11 @@ public class enemy_script : MonoBehaviour
 
     void Update() // Updates each frame
     {
-        if (gameManager.isPaused)
+        if (gameManager.isPaused || gameManager.caught)
         {
-            moveSpeed = 0f;
+            rb.velocity = new Vector2(0, 0);
         }
-        else if (playerDist <= caughtDist)
+        else if (playerDist <= caughtDist && currStatus != "paralyzed")
         {
             gameManager.caught = true;
         }
@@ -123,7 +123,6 @@ public class enemy_script : MonoBehaviour
         prevStatus = currStatus;
 
         if (paralysisSpell.isCastingParalysis &&
-
             (playerDist <= paralysisSpell.paralysisDistance ||
             prevStatus == "paralyzed"))
         {
@@ -145,7 +144,7 @@ public class enemy_script : MonoBehaviour
             moveSpeed = 2f;
             patrol = false;
 
-            if (prevStatus != "sus") // if status changes, make new path
+            if (prevStatus != "sus") // if status changes, make new path to player
             {
                 pathExists = false;
                 pathType = "sus";

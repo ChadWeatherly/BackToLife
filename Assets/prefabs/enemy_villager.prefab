@@ -301,7 +301,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.03, y: 0}
+  m_Offset: {x: -0.01, y: 0}
   m_Size: {x: 0.19, y: 0.43}
   m_Direction: 0
 --- !u!82 &3869814491984808493
@@ -440,7 +440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae8a5206e6a5c4e3192b3ce3534f0d7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  caughtScreenManager: {fileID: 0}
+  gameManager: {fileID: 0}
   waypoints:
   - {fileID: 2884067374279480989}
   - {fileID: 6602336390416684706}
@@ -454,8 +454,7 @@ MonoBehaviour:
   player: {fileID: 2116798045378936174, guid: 0b5eb923dd4adc04cb7cf4bff705e493, type: 3}
   maxSoundDistance: 20
   footstep: {fileID: 3869814491984808493}
-  susDist: 5
-  atkDist: 4
+  playerDist: 100
   sightCone: {fileID: 5416002245250370179}
   characterSprite: {fileID: 8827835582821368430}
   northSprites:
@@ -557,7 +556,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5998936044462168000}
   - component: {fileID: 9173897137589415532}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: sightCone
   m_TagString: Untagged
   m_Icon: {fileID: 0}

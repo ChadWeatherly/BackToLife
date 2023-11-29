@@ -424,6 +424,7 @@ MonoBehaviour:
   - {fileID: 377330768, guid: 0dfa39437fc28db4c8d034444a68113e, type: 3}
   numParalysisSpells: 3
   isCastingParalysis: 0
+  wasCasting: 0
 --- !u!1 &2731747185193203245
 GameObject:
   m_ObjectHideFlags: 0
@@ -747,6 +748,7 @@ MonoBehaviour:
   sprintSpeed: 6
   spawnPoint: {fileID: 6061411566673427489}
   rb: {fileID: 8309828373194826303}
+  gameManager: {fileID: 0}
   animateTime: 0.25
   characterSprite: {fileID: 6525804933933598687}
   northSprites:
