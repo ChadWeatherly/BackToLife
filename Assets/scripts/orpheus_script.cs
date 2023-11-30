@@ -36,13 +36,14 @@ public class orpheus_script : MonoBehaviour
 
     public AudioSource footStepAudioSource;
     public float movementThreshold = 0.003f;
-
+    public BlackHoleSpell blackHoleSpell;
     // Start is called before the first frame update
     void Start()
     {
         transform.position = spawnPoint.position;
         rb = GetComponent<Rigidbody2D>();
         paralysisSpell = GetComponentInChildren<ParalysisSpell>();
+        blackHoleSpell = GetComponentInChildren<BlackHoleSpell>();
         prev_nsew = "none";
         lastPosition = new Vector2(transform.position.x, transform.position.y);
         restingSprite = southSprites[0];
@@ -58,11 +59,13 @@ public class orpheus_script : MonoBehaviour
         }
         else
         {
+            
             ProcessInputs();
             Move();
             AnimateSprite();
             PlayFootstepSound();
         }
+        
         lastPosition = new Vector2(transform.position.x, transform.position.y);
     }
 
@@ -91,6 +94,18 @@ public class orpheus_script : MonoBehaviour
         // Paralysis Spell Casting
         if (Input.GetKey(KeyCode.Space)) {
             paralysisSpell.isCastingParalysis = true;
+        }
+        if (Input.GetMouseButtonDown(1))
+        {
+           // Convert the mouse position from screen space to world space
+           Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+           // Set the position of the black hole to the mouse position
+           blackHoleSpell.transform.position = mouseWorldPos;
+
+           // Activate the spell
+           blackHoleSpell.isCastingBlackHole = true;
+           Debug.Log("Casting black hole!");
         }
 
     }

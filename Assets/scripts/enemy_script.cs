@@ -7,7 +7,7 @@ using Pathfinding;
 public class enemy_script : MonoBehaviour
 {
     public GameManager gameManager;
-
+    
     // Basic movement parameters and general variables
     public Transform[] waypoints;  // Array of patrol waypoints, as Transforms
     public Transform spawnPoint;
@@ -68,6 +68,11 @@ public class enemy_script : MonoBehaviour
 
     // For paralysis spell
     private ParalysisSpell paralysisSpell;
+    //For blackhole spell
+    public BlackHoleSpell blackHoleSpell;
+    public float gravityDistance = 10f; // The distance within which the gravity effect will be applied
+    public float gravityForce = 10f; // The force of the gravity effect
+    private Vector2 prevVelocity;
 
     void Start() // Runs at the start of the game, before any frames
     {
@@ -75,7 +80,7 @@ public class enemy_script : MonoBehaviour
         seeker = GetComponent<Seeker>();
         paralysisSpell = player.GetComponentInChildren<ParalysisSpell>();
         coneSprite = sightCone.GetComponent<SpriteRenderer>();
-
+        blackHoleSpell = player.GetComponentInChildren<BlackHoleSpell>();
         transform.position = spawnPoint.position;
         // Distance to player
         wpi = 1; // Spawns at WayPoint 0, moves towards WayPoint 1
@@ -121,14 +126,31 @@ public class enemy_script : MonoBehaviour
     private void UpdateStatus()
     {
         prevStatus = currStatus;
-
-        if (paralysisSpell.isCastingParalysis &&
+        if(blackHoleSpell.isCastingBlackHole || (paralysisSpell.isCastingParalysis &&
             (playerDist <= paralysisSpell.paralysisDistance ||
-            prevStatus == "paralyzed"))
-        {
-            currStatus = "paralyzed";
-            moveSpeed = 0f;
-        }
+            prevStatus == "paralyzed"))){
+            if (blackHoleSpell.isCastingBlackHole)
+            {
+                Vector2 direction = (blackHoleSpell.transform.position - transform.position).normalized;
+                Debug.Log("Direction: " + direction); // Log the direction
+
+                // Define the maximum distance for the force to be applied
+                float maxDistance = 5f;
+
+                // Apply the force to objects within the maximum distance
+                ApplyForceToObjects(direction, gravityForce, maxDistance);
+
+                prevVelocity = rb.velocity;
+                Debug.Log("Velocity: " + rb.velocity); // Log the velocity
+            }
+            if (paralysisSpell.isCastingParalysis &&
+                (playerDist <= paralysisSpell.paralysisDistance ||
+                prevStatus == "paralyzed"))
+            {
+                currStatus = "paralyzed";
+                moveSpeed = 0f;
+            }
+            }
         else if (playerDist <= atkDist) // if aggro
         {
             currStatus = "aggro";
@@ -440,6 +462,23 @@ public class enemy_script : MonoBehaviour
             footstep.Pause();
         }
         
+    }
+    private void ApplyForceToObjects(Vector2 direction, float gravityForce, float maxDistance)
+    {
+    // Get all objects in the scene with a Rigidbody
+        Rigidbody2D[] allObjects = FindObjectsOfType<Rigidbody2D>();
+
+        foreach (Rigidbody2D obj in allObjects)
+        {
+            // Calculate the distance between the black hole and the object
+            float distance = Vector2.Distance(blackHoleSpell.transform.position, obj.transform.position);
+
+            // If the object is within the maximum distance, apply the force
+            if (distance <= maxDistance)
+            {
+                obj.AddForce(direction * gravityForce, ForceMode2D.Impulse);
+            }
+        }
     }
 
 }

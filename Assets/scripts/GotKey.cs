@@ -39,9 +39,12 @@ public class GotKey : MonoBehaviour
 
     private void Update()
     {
-        if (door.doorStatus == "open")
+        if (door != null && door.doorStatus == "open")
         {
-            HUDimage.sprite = null;
+            if (HUDimage != null)
+            {
+                HUDimage.sprite = null;
+            }   
         }
     }
 }
