@@ -89,7 +89,7 @@ public class orpheus_script : MonoBehaviour
         //Debug.Log(angleDirection);
 
         // Paralysis Spell Casting
-        if (Input.GetKey(KeyCode.Space)) {
+        if (Input.GetKey(KeyCode.Space) && paralysisSpell.numParalysisSpells > 0) {
             paralysisSpell.isCastingParalysis = true;
         }
 
