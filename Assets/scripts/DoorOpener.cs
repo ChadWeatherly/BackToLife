@@ -35,6 +35,7 @@ public class DoorOpener : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Orpheus")
+            //print("collided");
             if (key.gotKey)
             {
                 animate = true;
@@ -43,6 +44,7 @@ public class DoorOpener : MonoBehaviour
             }
             else if (doorStatus == "closed")
             {
+            //print("text bubble set active");
                 textBubble.SetActive(true);
             }
     }

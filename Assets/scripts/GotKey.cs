@@ -17,6 +17,8 @@ public class GotKey : MonoBehaviour
         keySprite = GetComponent<SpriteRenderer>().sprite;
         //spriteColor
 
+        gotKey = false;
+
         HUDimage = keyHUD.GetComponent<Image>();
         HUDimage.sprite = null;
         HUDimage.color = Color.clear;

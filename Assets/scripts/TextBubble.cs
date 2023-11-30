@@ -39,6 +39,7 @@ public class TextBubble : MonoBehaviour
 
     private void OnEnable()
     {
+        print("enabled");
         enable = true;
     }
 
@@ -54,6 +55,9 @@ public class TextBubble : MonoBehaviour
             }
 
             wasEnabled = true;
+            txt.color = new Color(txt.color.r, txt.color.g, txt.color.b, 1f);
+            background.color = new Color(background.color.r, background.color.g, background.color.b,
+                1f);
 
             if (aliveTimer >= timeAlive)
             {
