@@ -26,7 +26,6 @@ public class CaughtScreen : MonoBehaviour
 
     private void Update()
     {
-        print(fadeTimer);
         if (hasBeenCaught) 
         {
             fadeTimer += Time.deltaTime;
@@ -36,7 +35,8 @@ public class CaughtScreen : MonoBehaviour
         }
         if (fadeTimer >= fadeInDuration)
         {
-            gameManager.isPaused = true;
+            //Debug.Log("should be pausing");
+            gameManager.Pause();
         }
 
     }
@@ -44,7 +44,9 @@ public class CaughtScreen : MonoBehaviour
     public void RestartLvl()
     {
         // Load the current scene again
+        gameManager.Resume();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        
     }
 
     public void Quit()

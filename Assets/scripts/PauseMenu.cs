@@ -42,7 +42,6 @@ public class PauseMenu : MonoBehaviour
     {
         pauseMenuUI.SetActive(false);
         optionMenuUI.SetActive(false);
-        gameManager.isPaused = false;
         Time.timeScale = 1f;
         GameIsPaused = false;
         Debug.Log("Game is resumed");
@@ -51,7 +50,6 @@ public class PauseMenu : MonoBehaviour
     public void Pause()
     {
         pauseMenuUI.SetActive(true);
-        gameManager.isPaused = true;
         Time.timeScale = 0f;
         GameIsPaused = true;
         Debug.Log("Game is paused");

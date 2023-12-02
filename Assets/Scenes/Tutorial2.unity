@@ -4180,6 +4180,51 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &242380910
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 242380911}
+  - component: {fileID: 242380912}
+  m_Layer: 6
+  m_Name: BlackHoleSpell
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &242380911
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242380910}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 9.04, y: 3.64, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1900237206}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &242380912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242380910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8461fd8f3b54cf044ab7fc88099820c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isCastingBlackHole: 0
 --- !u!1 &324140890
 GameObject:
   m_ObjectHideFlags: 0
@@ -123417,7 +123462,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcc72aaefd2104394947796b0ce9bb78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPaused: 0
   caught: 0
   caughtScreen: {fileID: 457378198}
 --- !u!4 &1534202469
@@ -126220,7 +126264,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 40506101069032850, guid: 5b24a0b11f61de24ab60ff714a7e1369, type: 3}
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1862599378432401661, guid: 5b24a0b11f61de24ab60ff714a7e1369, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 242380911}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b24a0b11f61de24ab60ff714a7e1369, type: 3}
 --- !u!1660057539 &9223372036854775807

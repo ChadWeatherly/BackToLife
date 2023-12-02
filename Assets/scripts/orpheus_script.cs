@@ -52,19 +52,19 @@ public class orpheus_script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameManager.isPaused || gameManager.caught)
+        /*if (gameManager.isPaused() || gameManager.caught)
         {
             moveSpeed = 0f;
             characterSprite.sprite = restingSprite;
         }
         else
         {
-            
+            */
             ProcessInputs();
             Move();
             AnimateSprite();
             PlayFootstepSound();
-        }
+        //}
         
         lastPosition = new Vector2(transform.position.x, transform.position.y);
     }

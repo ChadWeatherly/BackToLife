@@ -92,16 +92,16 @@ public class enemy_script : MonoBehaviour
 
     void Update() // Updates each frame
     {
-        if (gameManager.isPaused || gameManager.caught)
+        /*if (gameManager.caught)
         {
             rb.velocity = new Vector2(0, 0);
-        }
-        else if (playerDist <= caughtDist && currStatus != "paralyzed")
+        }*/
+        if (playerDist <= caughtDist && currStatus != "paralyzed")
         {
             gameManager.caught = true;
+            PauseMenu.GameIsPaused = true;
         }
-        else if (!gameManager.isPaused)
-        {
+        //else if (!gameManager.GameIsPaused){
             // Updates alert status based on distance to player
             // Also handles all movement
             UpdateStatus();
@@ -109,7 +109,7 @@ public class enemy_script : MonoBehaviour
             UpdateCone();
             // Updates sprite based on angle direction
             UpdateDirectionSprites();
-        }
+        //}
     }
 
     private void FixedUpdate()
